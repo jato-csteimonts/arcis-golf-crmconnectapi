@@ -60,7 +60,7 @@
 
                                 <ul class="dropdown-menu" role="menu">
                                     <li>
-                                        <a href="/users">Users</a>
+                                        <a href="/admin/users">Users</a>
                                     </li>
                                     <li>
                                         <a href="{{ route('logout') }}"
