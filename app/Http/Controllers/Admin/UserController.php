@@ -50,7 +50,7 @@ class UserController extends Controller
         $user->password = bcrypt(md5(date('YmdHis') . rand(0,10000) . rand(0, 10000)));
         $user->save();
 
-        return redirect('/users');
+        return redirect('/admin/users');
     }
 
     /**
@@ -93,7 +93,7 @@ class UserController extends Controller
         $user->email = $request->get('email');
         $user->save();
 
-        return redirect('/users');
+        return redirect('/admin/users');
     }
 
     /**
@@ -106,6 +106,6 @@ class UserController extends Controller
     {
         $user = User::find($id);
         $user->delete();
-        return redirect('/users');
+        return redirect('/admin/users');
     }
 }

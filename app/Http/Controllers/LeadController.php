@@ -57,10 +57,6 @@ class LeadController extends Controller
 
     }
 
-    public function anotherWebhook(Request $request)
-    {
-        $this->_saveRawToLeadsTable($request, 'anotehr');
-    }
 
     private function _saveRawToLeadsTable($request, $source)
     {

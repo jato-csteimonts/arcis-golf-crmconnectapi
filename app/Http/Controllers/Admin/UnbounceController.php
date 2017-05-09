@@ -4,9 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Lead;
 
-class LeadController extends Controller
+use App\Unbounce;
+
+class UnbounceController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,10 +16,10 @@ class LeadController extends Controller
      */
     public function index()
     {
-        $leads = Lead::all();
+        $unbounces = Unbounce::all();
 
-        return view('web.leads.index', [
-            'leads' => $leads
+        return view('web.unbounces.index', [
+            'unbounces' => $unbounces
         ]);
     }
 
@@ -29,10 +30,10 @@ class LeadController extends Controller
      */
     public function create()
     {
-        $lead = new Lead();
+        $unbounce = new Unbounce();
 
-        return view('web.leads.form', [
-            'lead' => $lead
+        return view('web.unbounces.form', [
+            'unbounce' => $unbounce
         ]);
     }
 
@@ -44,13 +45,13 @@ class LeadController extends Controller
      */
     public function store(Request $request)
     {
-        $lead = new Lead();
-        $lead->name = $request->get('name');
-        $lead->email = $request->get('email');
-        $lead->password = bcrypt(md5(date('YmdHis') . rand(0,10000) . rand(0, 10000)));
-        $lead->save();
+        $unbounce = new Unbounce();
+        $unbounce->name = $request->get('name');
+        $unbounce->email = $request->get('email');
+        $unbounce->password = bcrypt(md5(date('YmdHis') . rand(0,10000) . rand(0, 10000)));
+        $unbounce->save();
 
-        return redirect('/admin/leads');
+        return redirect('/admin/unbounces');
     }
 
     /**
@@ -72,10 +73,10 @@ class LeadController extends Controller
      */
     public function edit($id)
     {
-        $lead = Lead::find($id);
+        $unbounce = Unbounce::find($id);
 
-        return view('web.leads.form', [
-            'lead' => $lead
+        return view('web.unbounces.form', [
+            'unbounce' => $unbounce
         ]);
     }
 
@@ -88,12 +89,12 @@ class LeadController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $lead = Lead::find($id);
-        $lead->name = $request->get('name');
-        $lead->email = $request->get('email');
-        $lead->save();
+        $unbounce = Unbounce::find($id);
+        $unbounce->name = $request->get('name');
+        $unbounce->email = $request->get('email');
+        $unbounce->save();
 
-        return redirect('/admin/leads');
+        return redirect('/admin/unbounces');
     }
 
     /**
@@ -104,8 +105,8 @@ class LeadController extends Controller
      */
     public function destroy($id)
     {
-        $lead = Lead::find($id);
-        $lead->delete();
-        return redirect('/adminr/leads');
+        $unbounce = Unbounce::find($id);
+        $unbounce->delete();
+        return redirect('/adminr/unbounces');
     }
 }

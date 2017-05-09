@@ -63,6 +63,12 @@
                                         <a href="/admin/users">Users</a>
                                     </li>
                                     <li>
+                                        <a href="/admin/leads">Leads (raw)</a>
+                                    </li>
+                                    <li>
+                                        <a href="/admin/unbounces">Unbounces</a>
+                                    </li>
+                                    <li>
                                         <a href="{{ route('logout') }}"
                                             onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">

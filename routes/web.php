@@ -24,4 +24,5 @@ Route::any('/webhooks/unbounce', 'LeadController@unbounceWebhook');
 Route::group(['middleware' => ['auth']], function() {
     Route::resource('/admin/users', 'Admin\UserController');
     Route::resource('/admin/leads', 'Admin\LeadController');
+    Route::resource('/admin/unbounces', 'Admin\UnbounceController');
 });
