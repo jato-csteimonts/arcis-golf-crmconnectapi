@@ -7,7 +7,7 @@ use App\Unbounce;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
-class UnbounceController extends Controller
+class UnbounceController extends LeadController
 {
     protected $unbounce;
     protected $first_name;
