@@ -15,6 +15,7 @@ class CreateUnbouncesTable extends Migration
     {
         Schema::create('unbounces', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedBigInteger('lead_id');
 
             // custom info
             $table->string('name')->nullable();

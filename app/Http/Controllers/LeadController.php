@@ -31,33 +31,13 @@ class LeadController extends Controller
 
     public function postEventLead(Array $json = [], $mode = 'apply')
     {
-        try {
-            $r = $this->client->request('POST', '', [
-                'auth' => [
-                    env('RESERVE_INTERACTIVE_USERNAME'),
-                    env('RESERVE_INTERACTIVE_PASSWORD')
-                ],
-                'query' => [
-                    'requestName' => 'EventLeadImport',
-                    'requestGuid' => md5(date('YmdHis')),
-                    'mode' => $mode
-                ],
-                'json' => $json
-            ]);
-            $body = json_decode($r->getBody());
-            print_r($body);
-            die();
-        } catch (\Exception $e) {
-            Log::info('guzzle error: ' . $e->getMessage());
-            echo($e->getMessage());
-            die();
-        }
+
 
     }
 
     public function unbounceWebhook(Request $request)
     {
-        $this->_saveRawToLeadsTable($request, 'unbounce');
+        $lead = parent::_saveRawToLeadsTable($request, 'unbounce');
 
         $form_data = json_decode($request->data_json);
 
@@ -83,6 +63,7 @@ class LeadController extends Controller
         ];
 
         $unbounce = new Unbounce();
+        $unbounce->lead_id = $lead->id;
 
         // loop through the expected fields in the form_data object and sanitize them, then,
         // add them to the unbounce object
@@ -146,13 +127,7 @@ class LeadController extends Controller
     }
 
 
-    private function _saveRawToLeadsTable($request, $source)
-    {
-        $lead = new Lead();
-        $lead->source = $source;
-        $lead->raw = serialize($request->all());
-        $lead->save();
-    }
+
 
 
 
