@@ -26,3 +26,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('/admin/leads', 'Admin\LeadController');
     Route::resource('/admin/unbounces', 'Admin\UnbounceController');
 });
+
+
+// test routes
+Route::any('/test_RI', 'LeadController@test_RI');

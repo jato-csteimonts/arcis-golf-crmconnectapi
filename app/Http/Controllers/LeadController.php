@@ -7,8 +7,53 @@ use Illuminate\Http\Request;
 use App\Lead;
 use App\Unbounce;
 
+use GuzzleHttp\Client;
+
+use Illuminate\Support\Facades\Log;
+
 class LeadController extends Controller
 {
+    protected $client;
+
+    public function __construct()
+    {
+        // ReserveInteractive Connection Items
+        // todo: this, and all ReserveInteractive, should be refactored out of this controller eventually and into a job/queue item perhaps
+        $this->client = new Client([
+            'base_uri' => 'https://www.reservecloud.com/gateway/request',
+            'timeout' => 5.0,
+        ]);
+
+        // End ReserveInteractive Connection Items
+    }
+
+
+
+    public function postEventLead(Array $json = [], $mode = 'apply')
+    {
+        try {
+            $r = $this->client->request('POST', '', [
+                'auth' => [
+                    env('RESERVE_INTERACTIVE_USERNAME'),
+                    env('RESERVE_INTERACTIVE_PASSWORD')
+                ],
+                'query' => [
+                    'requestName' => 'EventLeadImport',
+                    'requestGuid' => md5(date('YmdHis')),
+                    'mode' => $mode
+                ],
+                'json' => $json
+            ]);
+            $body = json_decode($r->getBody());
+            print_r($body);
+            die();
+        } catch (\Exception $e) {
+            Log::info('guzzle error: ' . $e->getMessage());
+            echo($e->getMessage());
+            die();
+        }
+
+    }
 
     public function unbounceWebhook(Request $request)
     {
@@ -55,6 +100,49 @@ class LeadController extends Controller
 
         $unbounce->save();
 
+        // try to figure out a first and last name
+        $first_name = $unbounce->name;
+        $last_name = '';
+        $flast = explode(' ', $unbounce->name, 2);
+        if (isset($flast[1])) {
+            $last_name = $flast[1];
+            $first_name = $flast[0];
+        }
+
+        // push to the crm
+        $this->postEventLead([
+            'header' => [
+                'lead.site.name',
+                'lead.salesperson.emailAddress',
+                'lead.owner.emailAddress',
+                'lead.division.name',
+                'lead.name',
+                'lead.contact.firstName',
+                'lead.contact.lastName',
+                'lead.contact.email',
+                'lead.customData(0).tx00',
+                'lead.leadStatus'
+//                'lead.referral'
+
+            ],
+            'data' => [
+                [
+                    $unbounce->club,
+                    $unbounce->salesperson,
+                    $unbounce->owner,
+                    $unbounce->division,
+                    'the name of the event', // todo: we need to figure this out how it comes in from unbounce
+                    $first_name,
+                    $last_name,
+                    $unbounce->email,
+                    $unbounce->notes,
+                    'New'
+//                    'referral type', //todo: we need to know what this is from unbounce, or, hard-coded
+
+                ]
+            ]
+        ], 'apply');
+
     }
 
 
@@ -64,5 +152,42 @@ class LeadController extends Controller
         $lead->source = $source;
         $lead->raw = serialize($request->all());
         $lead->save();
+    }
+
+
+
+
+
+
+
+
+    /**
+     * Takes a method, a request name, and a max results int and returns the body of the request if successful
+     * and false if fails.
+     *
+     * @param $method string
+     * @param $requestName string
+     * @param $maxResults int
+     * @return bool|\Psr\Http\Message\StreamInterface
+     */
+    private function _makeReserveInteractiveRequest($method, $requestName, $maxResults)
+    {
+        try {
+            $response = $this->client->request($method, '', [
+                'auth' => [
+                    env('RESERVE_INTERACTIVE_USERNAME'),
+                    env('RESERVE_INTERACTIVE_PASSWORD')
+                ],
+                'query' => [
+                    'requestName' => $requestName,
+                    'requestGuid' => md5(date('YmdHis')),
+                    'maxResults' => $maxResults
+                ]
+            ]);
+            $body = $response->getBody();
+            return $body;
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 }
