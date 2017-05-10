@@ -38,11 +38,13 @@ class postReserveInteractiveLead implements ShouldQueue
      */
     public function handle()
     {
+        // create a guzzle client
         $client = new Client([
-            'base_uri' => 'https://www.reservecloud.com/gateway/request',
-            'timeout' => 5.0,
+            'base_uri' => env('RESERVE_INTERACTIVE_BASE_URI'),
+            'timeout' => 30.0,
         ]);
 
+        // builds an array as expected by the Reserve Interactive API
         $arr = [
             'auth' => [
                 env('RESERVE_INTERACTIVE_USERNAME'),
@@ -56,7 +58,7 @@ class postReserveInteractiveLead implements ShouldQueue
             'json' => $this->json
         ];
 
-
+        // fires the POST request to store the data on the Reserve Interactive API CRM
         $r = $client->request('POST', '', $arr);
 
     }
