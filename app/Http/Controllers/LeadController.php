@@ -19,10 +19,7 @@ class LeadController extends Controller
     {
         // ReserveInteractive Connection Items
         // todo: this, and all ReserveInteractive, should be refactored out of this controller eventually and into a job/queue item perhaps
-        $this->client = new Client([
-            'base_uri' => 'https://www.reservecloud.com/gateway/request',
-            'timeout' => 5.0,
-        ]);
+
 
         // End ReserveInteractive Connection Items
     }

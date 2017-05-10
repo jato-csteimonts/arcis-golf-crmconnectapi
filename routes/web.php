@@ -19,7 +19,7 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::any('/webhooks/unbounce', 'LeadController@unbounceWebhook');
+Route::post('/unbounce/webhook', 'UnbounceController@webhook');
 
 Route::group(['middleware' => ['auth']], function() {
     Route::resource('/admin/users', 'Admin\UserController');

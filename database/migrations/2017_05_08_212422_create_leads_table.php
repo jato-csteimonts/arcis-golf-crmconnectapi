@@ -16,6 +16,7 @@ class CreateLeadsTable extends Migration
         Schema::create('leads', function (Blueprint $table) {
             $table->increments('id');
             $table->string('source')->nullable();
+            $table->string('table')->nullable();
             $table->longText('raw')->nullable();
             $table->timestamps();
         });

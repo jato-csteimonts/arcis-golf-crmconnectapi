@@ -8,6 +8,11 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 
+use Illuminate\Support\Facades\Log;
+
+use GuzzleHttp\Client;
+
+
 class postReserveInteractiveLead implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
@@ -33,26 +38,26 @@ class postReserveInteractiveLead implements ShouldQueue
      */
     public function handle()
     {
-        try {
-            $r = $this->client->request('POST', '', [
-                'auth' => [
-                    env('RESERVE_INTERACTIVE_USERNAME'),
-                    env('RESERVE_INTERACTIVE_PASSWORD')
-                ],
-                'query' => [
-                    'requestName' => $this->requestName,
-                    'requestGuid' => md5(date('YmdHis')),
-                    'mode' => 'apply'
-                ],
-                'json' => $this->json
-            ]);
-            $body = json_decode($r->getBody());
-            print_r($body);
-            die();
-        } catch (\Exception $e) {
-            Log::info('guzzle error: ' . $e->getMessage());
-            echo($e->getMessage());
-            die();
-        }
+        $client = new Client([
+            'base_uri' => 'https://www.reservecloud.com/gateway/request',
+            'timeout' => 5.0,
+        ]);
+
+        $arr = [
+            'auth' => [
+                env('RESERVE_INTERACTIVE_USERNAME'),
+                env('RESERVE_INTERACTIVE_PASSWORD')
+            ],
+            'query' => [
+                'requestName' => $this->requestName,
+                'requestGuid' => md5(date('YmdHis')),
+                'mode' => 'apply'
+            ],
+            'json' => $this->json
+        ];
+
+
+        $r = $client->request('POST', '', $arr);
+
     }
 }
