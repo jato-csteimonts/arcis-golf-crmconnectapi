@@ -35,6 +35,7 @@ class CreateUnbouncesTable extends Migration
             $table->string('date_submitted')->nullable();
             $table->string('page_url')->nullable();
             $table->string('page_name')->nullable();
+            $table->string('spouse')->nullable();
 
             $table->timestamps();
         });

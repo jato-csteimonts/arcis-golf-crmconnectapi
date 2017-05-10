@@ -10,6 +10,8 @@ use Illuminate\Foundation\Bus\Dispatchable;
 
 use Illuminate\Support\Facades\Log;
 
+use App\ReserveInteractive;
+
 use GuzzleHttp\Client;
 
 
@@ -19,16 +21,18 @@ class postReserveInteractiveLead implements ShouldQueue
 
     protected $requestName;
     protected $json;
+    protected $lead_id;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($requestName, $json)
+    public function __construct($requestName, $json, $lead_id)
     {
         $this->requestName = $requestName;
         $this->json = $json;
+        $this->lead_id = $lead_id;
     }
 
     /**
@@ -60,6 +64,12 @@ class postReserveInteractiveLead implements ShouldQueue
 
         // fires the POST request to store the data on the Reserve Interactive API CRM
         $r = $client->request('POST', '', $arr);
+        $ri = new ReserveInteractive();
+        $ri->lead_id = $this->lead_id;
+        $ri->request_name = $this->requestName;
+        $ri->request_json = json_encode($this->json);
+        $ri->response = $r->getBody();
+        $ri->save();
 
     }
 }

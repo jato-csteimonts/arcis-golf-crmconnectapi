@@ -13,6 +13,7 @@ class UnbounceController extends LeadController
     protected $first_name;
     protected $last_name;
     protected $json;
+    protected $publish_to;
 
     /**
      * Sets the ubounce data object.
@@ -22,6 +23,7 @@ class UnbounceController extends LeadController
      */
     public function __construct()
     {
+        $this->publish_to = ['reserveinteractive'];
         $this->unbounce = new Unbounce();
         $this->json = [];
     }
@@ -54,11 +56,33 @@ class UnbounceController extends LeadController
         // tries to figure out first and last name
         $this->_extractFirstAndLastName();
 
-        // builds the final json array
-        $this->_buildJsonArray();
+        ///////////////////////////////////////////////////////////////////////////////////////
+        // the class variable array of publish_to tells us what to do with the final data set
+        ///////////////////////////////////////////////////////////////////////////////////////
+        // todo: refactor this out to the LeadController perhaps?
+        // Reserve Interactive CRM /////////////////////////
+        if (in_array('reserveinteractive', $this->publish_to)) {
 
-        // dispatches the job that pushes to the Reserve Interactive CRM
-        $this->dispatch(new postReserveInteractiveLead('EventLeadImport', $this->json));
+            // we expect a "lead_type" field to determine which requestName to use for Reserve Interactive
+            if ($form_data->lead_type[0] == 'member') {
+                $requestName = 'MemberLeadImport';
+            } elseif ($form_data->lead_type[0] == 'event') {
+                $requestName = 'EventLeadImport';
+            }
+
+            // builds the final json array
+            $this->_buildJsonArrayForReserveInteractive($form_data->lead_type[0]);
+
+            // dispatches the job that pushes to the Reserve Interactive CRM
+            $this->dispatch(new postReserveInteractiveLead($requestName, $this->json, $lead->id));
+        }
+
+        // ... other publish_to conditionals can be added here (e.g. email, etc.)
+
+        ///////////////////////////////////////////////////////////////////////////////////////
+        /// end publish_to blocks
+        ///////////////////////////////////////////////////////////////////////////////////////
+
 
     }
 
@@ -88,7 +112,8 @@ class UnbounceController extends LeadController
             'time_submitted',
             'date_submitted',
             'page_url',
-            'page_name'
+            'page_name',
+            'spouse'
         ];
 
         // loop through the expected fields in the form_data object and sanitize them, then,
@@ -122,42 +147,83 @@ class UnbounceController extends LeadController
     }
 
     /**
-     * Using the various class variables, this builds the final json array for the Reserve Interactive CRM
-     * push and stores it in a class variable.
+     * Takes a lead_type which will be either "event" or "member" and Using the various class variables
+     * this builds the final json array for the Reserve Interactive CRM push based on the fields as required
+     * for the lead_type and stores it in a class variable.
      */
-    private function _buildJsonArray()
+    private function _buildJsonArrayForReserveInteractive($lead_type)
     {
-        $this->json = [
-            'header' => [
-                'lead.site.name',
-                'lead.salesperson.emailAddress',
-                'lead.owner.emailAddress',
-                'lead.division.name',
-                'lead.name',
-                'lead.contact.firstName',
-                'lead.contact.lastName',
-                'lead.contact.email',
-                'lead.customData(0).tx00',
-                'lead.leadStatus'
+        if ($lead_type == 'event') { // if it's an "event" lead_type
+            $this->json = [
+                'header' => [
+                    'lead.site.name',
+                    'lead.salesperson.emailAddress',
+                    'lead.owner.emailAddress',
+                    'lead.division.name',
+                    'lead.name',
+                    'lead.contact.firstName',
+                    'lead.contact.lastName',
+                    'lead.contact.email',
+                    'lead.customData(0).tx00',
+                    'lead.leadStatus'
 //                'lead.referral'
 
-            ],
-            'data' => [
-                [
-                    $this->unbounce->club,
-                    $this->unbounce->salesperson,
-                    $this->unbounce->owner,
-                    $this->unbounce->division,
-                    'the name of the event', // todo: we need to figure this out how it comes in from unbounce
-                    $this->first_name,
-                    $this->last_name,
-                    $this->unbounce->email,
-                    $this->unbounce->notes,
-                    'New'
+                ],
+                'data' => [
+                    [
+                        $this->unbounce->club,
+                        $this->unbounce->salesperson,
+                        $this->unbounce->owner,
+                        $this->unbounce->division,
+                        $this->last_name . ' Event',
+                        $this->first_name,
+                        $this->last_name,
+                        $this->unbounce->email,
+                        $this->unbounce->notes,
+                        'New'
 //                    'referral type', //todo: we need to know what this is from unbounce, or, hard-coded
 
+                    ]
                 ]
-            ]
-        ];
+            ];
+        } elseif ($lead_type == 'member') { // if it's a "member" lead type
+            $this->json = [
+                'header' => [
+                    'clubLead.club',
+                    'clubLead.site.name',
+                    'clubLead.salesperson.emailAddress',
+                    'clubLead.owner.emailAddress',
+                    'clubLead.division.name',
+                    'clubLead.name',
+                    'clubLead.contact.firstName',
+                    'clubLead.contact.lastName',
+                    'clubLead.contact.email',
+                    'clubLead.customData(0).tx00',
+                    'clubLead.leadStatus',
+                    'clubLead.customData(0).tx03'
+//                'lead.referral'
+
+                ],
+                'data' => [
+                    [
+                        $this->unbounce->club,
+                        $this->unbounce->club,
+                        $this->unbounce->salesperson,
+                        $this->unbounce->owner,
+                        $this->unbounce->division,
+                        $this->last_name . ' Member',
+                        $this->first_name,
+                        $this->last_name,
+                        $this->unbounce->email,
+                        $this->unbounce->notes,
+                        'New',
+                        $this->unbounce->spouse
+//                    'referral type', //todo: we need to know what this is from unbounce, or, hard-coded
+
+                    ]
+                ]
+            ];
+        }
+
     }
 }
