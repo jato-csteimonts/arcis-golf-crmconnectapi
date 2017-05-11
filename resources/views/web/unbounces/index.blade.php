@@ -8,9 +8,6 @@
                     <div class="panel-heading">Unbounces</div>
 
                     <div class="panel-body">
-                        <p>
-                            <a class="btn btn-primary" href="/users/create">New</a>
-                        </p>
                         <table class="table table-bordered table-striped table-hover datatable">
                             <thead>
                                 <tr>
@@ -21,7 +18,6 @@
                                     <th>Notes</th>
                                     <th>Page Info</th>
                                     <th>UB Date/Time</th>
-                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -41,14 +37,6 @@
                                             <b>URL:</b> <a href="{{ $unbounce->page_url }}" target="_blank">{{ $unbounce->page_url }}</a><br />
                                             <b>Name:</b> {{ $unbounce->page_name }}</td>
                                         <td>{{ $unbounce->date_submitted }} {{ $unbounce->time_submitted }}</td>
-                                        <td>
-                                            <form class="form-inline" method="post" action="{{ url('/users/' . $unbounce->id) }}">
-                                                {{ csrf_field() }}
-                                                <input type="hidden" name="_method" value="delete" />
-                                                <a class="btn btn-sm btn-info" href="{{ url('/users/' . $unbounce->id . '/edit') }}">edit</a>
-                                                <button type="submit" class="btn btn-sm btn-danger delete">delete</button>
-                                            </form>
-                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
