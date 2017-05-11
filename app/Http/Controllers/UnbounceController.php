@@ -14,6 +14,7 @@ class UnbounceController extends LeadController
     protected $last_name;
     protected $json;
     protected $publish_to;
+    protected $notes;
 
     /**
      * Sets the ubounce data object.
@@ -25,6 +26,7 @@ class UnbounceController extends LeadController
     {
         $this->publish_to = ['reserveinteractive'];
         $this->unbounce = new Unbounce();
+        $this->notes = [];
         $this->json = [];
     }
 
@@ -99,13 +101,14 @@ class UnbounceController extends LeadController
         // some are not, just clean it up
         $expected_fields = [
             'name',
+            'first_name',
+            'last_name',
             'telephone',
             'email',
             'division',
             'club',
             'owner',
             'salesperson',
-            'notes',
             'ip_address',
             'page_uuid',
             'variant',
@@ -116,19 +119,20 @@ class UnbounceController extends LeadController
             'spouse'
         ];
 
-        // loop through the expected fields in the form_data object and sanitize them, then,
-        // add them to the unbounce object
-        foreach ($expected_fields as $expected_field) {
-            $v = null;
-            if (isset($form_data->{$expected_field})) {
-                if (is_array($form_data->{$expected_field})) {
-                    $v = $form_data->{$expected_field}[0];
-                } else {
-                    $v = $form_data->{$expected_field};
-                }
-            }
-            $this->unbounce->{$expected_field} = $v;
+        if (isset($form_data->notes[0])) {
+            array_push($this->notes, 'notes : ' . $form_data->notes[0]);
         }
+
+        foreach ($form_data as $form_field_key => $form_field_value) {
+            $form_field_key = strtolower($form_field_key);
+            if (in_array($form_field_key, $expected_fields)) {
+                $this->unbounce->{$form_field_key} = $form_field_value[0];
+            } else {
+                array_push($this->notes, $form_field_key . " : " . $form_field_value[0]);
+            }
+        }
+
+        $this->unbounce->notes = implode("\n", $this->notes);
     }
 
     /**
@@ -137,12 +141,22 @@ class UnbounceController extends LeadController
      */
     private function _extractFirstAndLastName()
     {
-        $this->first_name = $this->unbounce->name;
-        $this->last_name = '';
-        $flast = explode(' ', $this->unbounce->name, 2);
-        if (isset($flast[1])) {
-            $this->last_name = $flast[1];
-            $this->first_name = $flast[0];
+        if (isset($this->unbounce->name)) {
+            $this->first_name = $this->unbounce->name;
+            $this->last_name = '';
+            $flast = explode(' ', $this->unbounce->name, 2);
+            if (isset($flast[1])) {
+                $this->last_name = $flast[1];
+                $this->first_name = $flast[0];
+            }
+        }
+
+        if (isset($this->unbounce->first_name)) {
+            $this->first_name = $this->unbounce->first_name;
+        }
+
+        if (isset($this->unbounce->last_name)) {
+            $this->last_name = $this->unbounce->last_name;
         }
     }
 
