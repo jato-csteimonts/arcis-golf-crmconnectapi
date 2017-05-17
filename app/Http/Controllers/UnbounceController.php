@@ -116,7 +116,11 @@ class UnbounceController extends LeadController
             'date_submitted',
             'page_url',
             'page_name',
-            'spouse'
+            'spouse',
+            'street_address',
+            'city',
+            'state',
+            'zip'
         ];
 
         if (isset($form_data->notes[0])) {
@@ -179,8 +183,12 @@ class UnbounceController extends LeadController
                     'lead.contact.lastName',
                     'lead.contact.email',
                     'lead.customData(0).tx00',
-                    'lead.leadStatus'
-//                'lead.referral'
+                    'lead.leadStatus',
+                    'clubLead.contact.mobilePhone',
+                    'clubLead.contact.mailingAddress.address1',
+                    'clubLead.contact.mailingAddress.city',
+                    'clubLead.contact.mailingAddress.state',
+                    'clubLead.contact.mailingAddress.zipCode'
 
                 ],
                 'data' => [
@@ -194,8 +202,12 @@ class UnbounceController extends LeadController
                         $this->last_name,
                         $this->unbounce->email,
                         $this->unbounce->notes,
-                        'New'
-//                    'referral type', //todo: we need to know what this is from unbounce, or, hard-coded
+                        'New',
+                        $this->unbounce->telephone,
+                        $this->unbounce->street_address,
+                        $this->unbounce->city,
+                        $this->unbounce->state,
+                        $this->unbounce->zip
 
                     ]
                 ]
@@ -214,8 +226,13 @@ class UnbounceController extends LeadController
                     'clubLead.contact.email',
                     'clubLead.customData(0).tx00',
                     'clubLead.leadStatus',
-                    'clubLead.customData(0).tx03'
-//                'lead.referral'
+                    'clubLead.customData(0).tx03',
+                    'clubLead.contact.mobilePhone',
+                    'clubLead.contact.mailingAddress.address1',
+                    'clubLead.contact.mailingAddress.city',
+                    'clubLead.contact.mailingAddress.state',
+                    'clubLead.contact.mailingAddress.zipCode'
+
 
                 ],
                 'data' => [
@@ -231,8 +248,12 @@ class UnbounceController extends LeadController
                         $this->unbounce->email,
                         $this->unbounce->notes,
                         'New',
-                        $this->unbounce->spouse
-//                    'referral type', //todo: we need to know what this is from unbounce, or, hard-coded
+                        $this->unbounce->spouse,
+                        $this->unbounce->telephone,
+                        $this->unbounce->street_address,
+                        $this->unbounce->city,
+                        $this->unbounce->state,
+                        $this->unbounce->zip
 
                     ]
                 ]

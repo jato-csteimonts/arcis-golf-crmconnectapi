@@ -14,12 +14,14 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.min.css" rel="stylesheet" />
 
+
     <!-- Scripts -->
     <script>
         window.Laravel = {!! json_encode([
             'csrfToken' => csrf_token(),
         ]) !!};
     </script>
+
 </head>
 <body>
     <div id="app">
