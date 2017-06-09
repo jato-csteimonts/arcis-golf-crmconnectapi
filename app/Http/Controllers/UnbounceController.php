@@ -242,7 +242,7 @@ class UnbounceController extends LeadController
                         $this->unbounce->salesperson,
                         $this->unbounce->owner,
                         $this->unbounce->division,
-                        $this->last_name . ' Member',
+                        $this->first_name . ' ' . $this->last_name,
                         $this->first_name,
                         $this->last_name,
                         $this->unbounce->email,
