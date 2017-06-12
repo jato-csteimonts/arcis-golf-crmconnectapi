@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Jobs\postReserveInteractiveLead;
 use App\Unbounce;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -24,7 +23,7 @@ class UnbounceController extends LeadController
      */
     public function __construct()
     {
-        $this->publish_to = ['reserveinteractive'];
+        $this->publish_to = [];
         $this->unbounce = new Unbounce();
         $this->notes = [];
         $this->json = [];
@@ -58,32 +57,14 @@ class UnbounceController extends LeadController
         // tries to figure out first and last name
         $this->_extractFirstAndLastName();
 
-        ///////////////////////////////////////////////////////////////////////////////////////
-        // the class variable array of publish_to tells us what to do with the final data set
-        ///////////////////////////////////////////////////////////////////////////////////////
-        // todo: refactor this out to the LeadController perhaps?
-        // Reserve Interactive CRM /////////////////////////
-        if (in_array('reserveinteractive', $this->publish_to)) {
-
-            // we expect a "lead_type" field to determine which requestName to use for Reserve Interactive
-            if ($form_data->lead_type[0] == 'member') {
-                $requestName = 'MemberLeadImport';
-            } elseif ($form_data->lead_type[0] == 'event') {
-                $requestName = 'EventLeadImport';
-            }
-
-            // builds the final json array
-            $this->_buildJsonArrayForReserveInteractive($form_data->lead_type[0]);
-
-            // dispatches the job that pushes to the Reserve Interactive CRM
-            $this->dispatch(new postReserveInteractiveLead($requestName, $this->json, $lead->id));
-        }
-
-        // ... other publish_to conditionals can be added here (e.g. email, etc.)
-
-        ///////////////////////////////////////////////////////////////////////////////////////
-        /// end publish_to blocks
-        ///////////////////////////////////////////////////////////////////////////////////////
+        // publishes to whatever is in the publish_to array using the parent's publish function
+        parent::_publish([
+            'ReserveInteractive' => [
+                'json' => $this->_buildJsonArrayForReserveInteractive($form_data->lead_type[0]),
+                'form_data' => $form_data,
+                'lead' => $lead
+                ]
+        ]);
 
 
     }
@@ -259,6 +240,8 @@ class UnbounceController extends LeadController
                 ]
             ];
         }
+
+        return $this->json;
 
     }
 }

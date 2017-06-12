@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Log;
 use App\ReserveInteractive;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Psr7;
 
 
 class postReserveInteractiveLead implements ShouldQueue
@@ -63,13 +65,23 @@ class postReserveInteractiveLead implements ShouldQueue
         ];
 
         // fires the POST request to store the data on the Reserve Interactive API CRM
-        $r = $client->request('POST', '', $arr);
         $ri = new ReserveInteractive();
-        $ri->lead_id = $this->lead_id;
-        $ri->request_name = $this->requestName;
-        $ri->request_json = json_encode($this->json);
-        $ri->response = $r->getBody();
-        $ri->save();
+//        try {
+            $r = $client->request('POST', '', $arr);
+            $ri->lead_id = $this->lead_id;
+            $ri->request_name = $this->requestName;
+            $ri->request_json = (json_encode($this->json)) ? json_encode($this->json) : json_encode(['error']);
+            $ri->response = $r->getBody();
+            $ri->save();
+
+//        } catch (\Exception $e) {
+//            $ri->lead_id = 0;
+//            $ri->request_name = 'error';
+//            $ri->request_json = (json_encode($this->json)) ? json_encode($this->json) : json_encode(['error']);
+//            $ri->response = $e->getMessage();
+//            $ri->save();
+//        }
+
 
     }
 }

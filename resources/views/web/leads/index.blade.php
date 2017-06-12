@@ -21,7 +21,7 @@
                                 @foreach ($leads as $lead)
                                     <tr>
                                         <td>{{ $lead->source }}</td>
-                                        <td>{{ print_r(unserialize($lead->raw)) }}</td>
+                                        <td>{{ print_r($lead->raw) }}</td>
                                         <td>{{ $lead->created_at }}</td>
                                         <td>{{ $lead->updated_at }}</td>
 
