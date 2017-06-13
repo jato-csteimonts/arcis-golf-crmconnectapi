@@ -29,8 +29,12 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('/admin/leads', 'Admin\LeadController');
     Route::resource('/admin/unbounces', 'Admin\UnbounceController');
     Route::resource('/admin/reserveinteractives', 'Admin\ReserveInteractiveController');
+    Route::resource('/admin/domains', 'Admin\DomainController');
 });
 
 
 // test routes
-Route::any('/test_RI', 'LeadController@test_RI');
+//Route::any('/test_RI', 'LeadController@test_RI');
+Route::any('/webformtest', function() {
+    return view('web.webformtest');
+});
