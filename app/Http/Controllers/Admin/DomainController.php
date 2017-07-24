@@ -47,6 +47,10 @@ class DomainController extends Controller
     {
         $domain = new Domain();
         $domain->domain = $request->get('domain');
+        $domain->owner = $request->get('owner');
+        $domain->salesperson = $request->get('salesperson');
+        $domain->club = $request->get('club');
+        $domain->division = $request->get('division');
         $domain->save();
 
         return redirect('/admin/domains');
@@ -89,6 +93,10 @@ class DomainController extends Controller
     {
         $domain = Domain::find($id);
         $domain->domain = $request->get('domain');
+        $domain->owner = $request->get('owner');
+        $domain->salesperson = $request->get('salesperson');
+        $domain->club = $request->get('club');
+        $domain->division = $request->get('division');
         $domain->save();
 
         return redirect('/admin/domains');

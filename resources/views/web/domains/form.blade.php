@@ -23,6 +23,34 @@
                             </div>
 
                             <div class="form-group">
+                                <label for="owner" class="col-sm-2 control-label">Owner</label>
+                                <div class="col-sm-10">
+                                    <input placeholder="This should be an email address!" type="text" class="form-control" name="owner" id="owner" value="{{ $domain->owner }}" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="salesperson" class="col-sm-2 control-label">Salesperson</label>
+                                <div class="col-sm-10">
+                                    <input placeholder="This should be an email address!" type="text" class="form-control" name="salesperson" id="salesperson" value="{{ $domain->salesperson }}" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="club" class="col-sm-2 control-label">Club</label>
+                                <div class="col-sm-10">
+                                    <input placeholder="This needs to be an exact match to what is in RI." type="text" class="form-control" name="club" id="name" value="{{ $domain->club }}" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="division" class="col-sm-2 control-label">Division</label>
+                                <div class="col-sm-10">
+                                    <input placeholder="This needs to be an exact match to what is in RI." type="text" class="form-control" name="division" id="name" value="{{ $domain->division }}" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
                                 <div class="col-sm-offset-2 col-sm-10">
                                     <button type="submit" class="btn btn-default">Save</button>
                                 </div>

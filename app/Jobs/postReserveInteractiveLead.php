@@ -64,23 +64,27 @@ class postReserveInteractiveLead implements ShouldQueue
             'json' => $this->json
         ];
 
+        print_r($arr);
+
         // fires the POST request to store the data on the Reserve Interactive API CRM
         $ri = new ReserveInteractive();
-//        try {
+
+        try {
             $r = $client->request('POST', '', $arr);
             $ri->lead_id = $this->lead_id;
             $ri->request_name = $this->requestName;
             $ri->request_json = (json_encode($this->json)) ? json_encode($this->json) : json_encode(['error']);
             $ri->response = $r->getBody();
+            print_r($r->getBody());
             $ri->save();
 
-//        } catch (\Exception $e) {
-//            $ri->lead_id = 0;
-//            $ri->request_name = 'error';
-//            $ri->request_json = (json_encode($this->json)) ? json_encode($this->json) : json_encode(['error']);
-//            $ri->response = $e->getMessage();
-//            $ri->save();
-//        }
+        } catch (\Exception $e) {
+            $ri->lead_id = 0;
+            $ri->request_name = 'error';
+            $ri->request_json = (json_encode($this->json)) ? json_encode($this->json) : json_encode(['error']);
+            $ri->response = $e->getResponse()->getBody()->getContents();
+            $ri->save();
+        }
 
 
     }

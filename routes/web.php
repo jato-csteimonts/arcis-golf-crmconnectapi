@@ -30,7 +30,10 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('/admin/unbounces', 'Admin\UnbounceController');
     Route::resource('/admin/reserveinteractives', 'Admin\ReserveInteractiveController');
     Route::resource('/admin/domains', 'Admin\DomainController');
+    Route::resource('/admin/fields', 'Admin\FieldController');
 });
+
+Route::get('/webform-javascript', 'WebformController@serve_js');
 
 
 // test routes
