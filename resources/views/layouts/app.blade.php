@@ -65,6 +65,12 @@
                                         <a href="/admin/users">Users</a>
                                     </li>
                                     <li>
+                                        <a href="/admin/domains">Domains</a>
+                                    </li>
+                                    <li>
+                                        <a href="/admin/fields">Fields</a>
+                                    </li>
+                                    <li>
                                         <a href="/admin/leads">Leads (raw)</a>
                                     </li>
                                     <li>
