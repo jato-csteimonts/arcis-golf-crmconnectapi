@@ -70,8 +70,7 @@ class postReserveInteractiveLead implements ShouldQueue
         // fires the POST request to store the data on the Reserve Interactive API CRM
         $ri = new ReserveInteractive();
 
-        $u = User::find(1);
-        $u->notify(new \App\Notifications\ApiError("here");
+
 
         try {
             $r = $client->request('POST', '', $arr);
@@ -81,10 +80,12 @@ class postReserveInteractiveLead implements ShouldQueue
             $ri->response = $r->getBody();
 //            print_r($r->getBody());
             $ri->save();
-            if (strstr($ri->response, 'Failed')) {
-                $u = User::find(1);
-                $u->notify(new \App\Notifications\ApiError($ri));
-            }
+            $u = User::find(1);
+            $u->notify(new \App\Notifications\ApiError($ri));
+//            if (strstr($ri->response, 'Failed')) {
+//                $u = User::find(1);
+//                $u->notify(new \App\Notifications\ApiError($ri));
+//            }
 
         } catch (\Exception $e) {
             $ri->lead_id = 0;
@@ -92,10 +93,12 @@ class postReserveInteractiveLead implements ShouldQueue
             $ri->request_json = (json_encode($this->json)) ? json_encode($this->json) : json_encode(['error']);
             $ri->response = $e->getResponse()->getBody()->getContents();
             $ri->save();
-            if (strstr($ri->response, 'Failed')) {
-                $u = User::find(1);
-                $u->notify(new \App\Notifications\ApiError($ri));
-            }
+            $u = User::find(1);
+            $u->notify(new \App\Notifications\ApiError($ri));
+//            if (strstr($ri->response, 'Failed')) {
+//                $u = User::find(1);
+//                $u->notify(new \App\Notifications\ApiError($ri));
+//            }
         }
 
 

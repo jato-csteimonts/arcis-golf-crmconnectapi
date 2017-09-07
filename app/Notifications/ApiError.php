@@ -10,14 +10,14 @@ use Illuminate\Notifications\Messages\MailMessage;
 
 class ApiError extends Notification
 {
-    protected $ri;
+    protected $e;
 
     use Queueable;
 
 
-    public function __construct($ri)
+    public function __construct($e)
     {
-        $this->ri = $ri;
+        $this->e = $e;
     }
 
     /**
@@ -35,7 +35,7 @@ class ApiError extends Notification
     {
         return (new SlackMessage)
             ->success()
-            ->content(json_encode($this->ri));
+            ->content(json_encode($this->e));
     }
 
 
