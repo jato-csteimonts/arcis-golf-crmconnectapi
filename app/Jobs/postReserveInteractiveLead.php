@@ -70,6 +70,9 @@ class postReserveInteractiveLead implements ShouldQueue
         // fires the POST request to store the data on the Reserve Interactive API CRM
         $ri = new ReserveInteractive();
 
+        $u = User::find(1);
+        $u->notify(new \App\Notifications\ApiError("here");
+
         try {
             $r = $client->request('POST', '', $arr);
             $ri->lead_id = $this->lead_id;
