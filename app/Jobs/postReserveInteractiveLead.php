@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -75,7 +76,11 @@ class postReserveInteractiveLead implements ShouldQueue
             $ri->request_name = $this->requestName;
             $ri->request_json = (json_encode($this->json)) ? json_encode($this->json) : json_encode(['error']);
             $ri->response = $r->getBody();
-            print_r($r->getBody());
+//            print_r($r->getBody());
+            if (strstr($ri->response, 'Failed')) {
+                $u = User::find(1);
+                $u->notify(new \App\Notifications\ApiError($ri));
+            }
             $ri->save();
 
         } catch (\Exception $e) {
