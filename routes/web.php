@@ -12,6 +12,9 @@
 */
 
 Route::get('/', function () {
+    $user = App\User::find(1);
+    $admin = App\User::find(1);
+    $admin->notify(new \App\Notifications\ApiError($user));
     return view('welcome');
 });
 
