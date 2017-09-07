@@ -77,11 +77,11 @@ class postReserveInteractiveLead implements ShouldQueue
             $ri->request_json = (json_encode($this->json)) ? json_encode($this->json) : json_encode(['error']);
             $ri->response = $r->getBody();
 //            print_r($r->getBody());
+            $ri->save();
             if (strstr($ri->response, 'Failed')) {
                 $u = User::find(1);
                 $u->notify(new \App\Notifications\ApiError($ri));
             }
-            $ri->save();
 
         } catch (\Exception $e) {
             $ri->lead_id = 0;
@@ -89,6 +89,10 @@ class postReserveInteractiveLead implements ShouldQueue
             $ri->request_json = (json_encode($this->json)) ? json_encode($this->json) : json_encode(['error']);
             $ri->response = $e->getResponse()->getBody()->getContents();
             $ri->save();
+            if (strstr($ri->response, 'Failed')) {
+                $u = User::find(1);
+                $u->notify(new \App\Notifications\ApiError($ri));
+            }
         }
 
 
