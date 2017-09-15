@@ -205,6 +205,7 @@ class ReportController extends Controller
 
         foreach ($clubs as $club) {
             $club->total_monthly_dues = Add::select('monthly_dues')
+                ->whereNotNull('channel')
                 ->where('club_id', '=', $club->id)
                 ->sum('monthly_dues');
 
