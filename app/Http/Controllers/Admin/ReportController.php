@@ -107,6 +107,7 @@ class ReportController extends Controller
                     })
                     ->first();
                 if ($add) {
+                    $add->digitallead_id = $dl->id;
                     $add->marketed_at = $row->date_submitted;
                     $add->membership_interest = $row->membership_interest;
                     $add->channel = $row->channel;
@@ -169,6 +170,7 @@ class ReportController extends Controller
                     ->first();
                 if ($add) {
                     if ($row->date_submitted != 'Date submitted') {
+                        $add->websitelead_id = $wl->id;
                         $add->marketed_at = $row->date_submitted;
                         $add->form_type = $row->form_type;
                         $add->channel = 'website lead';
@@ -202,6 +204,10 @@ class ReportController extends Controller
         $clubs = Club::all();
 
         foreach ($clubs as $club) {
+            $club->total_monthly_dues = Add::select('monthly_dues')
+                ->where('club_id', '=', $club->id)
+                ->sum('monthly_dues');
+
             $club->member_types = Add::select('member_type', DB::raw('count(*) as total'))
                 ->where('club_id', '=', $club->id)
                 ->whereNotNull('channel')
