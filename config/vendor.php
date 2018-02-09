@@ -3,7 +3,5 @@
 		"name"    => "Christopher Steimonts",
 		"email"   => "chris.steimonts@gmail.com",
 		"company" => "JATO Development LLC",
-		"test" => "test",
-		"test2" => "test",
 	];
 ?>
