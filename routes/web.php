@@ -12,10 +12,11 @@
 */
 
 Route::get('/', function () {
-    $user = App\User::find(1);
-    $admin = App\User::find(1);
-    $admin->notify(new \App\Notifications\ApiError($user));
-    return view('welcome');
+	if(Auth::check()) {
+		return redirect("home");
+	} else {
+		return redirect("login");
+	}
 });
 
 Auth::routes();
