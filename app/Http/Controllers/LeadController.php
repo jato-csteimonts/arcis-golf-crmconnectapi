@@ -49,7 +49,7 @@ class LeadController extends Controller
             $requestName = 'EventLeadImport';
         }
         // dispatches the job that pushes to the Reserve Interactive CRM
-        Log::info($v['lead']->id);
+        // Log::info($v['lead']->id);
         $this->dispatch(new postReserveInteractiveLead($requestName, $v['json'], $v['lead']->id));
     }
 }

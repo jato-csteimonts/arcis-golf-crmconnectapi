@@ -77,6 +77,8 @@ class UnbounceController extends LeadController
      */
     private function _normalizeInputAndAddToUnbounceObject($form_data)
     {
+    	//Log::info(print_r($form_data,1));
+
         // these are fields that we expect to be in the form_data object, we have to do the same
         // sanitize on all of them, so, we'll do it in a loop through this array later, some are arrays
         // some are not, just clean it up
@@ -108,6 +110,10 @@ class UnbounceController extends LeadController
             array_push($this->notes, 'notes : ' . $form_data->notes[0]);
         }
 
+        if(!isset($form_data->division) && isset($form_data->divison)) {
+	        $form_data->division = $form_data->divison;
+        }
+
         foreach ($form_data as $form_field_key => $form_field_value) {
             $form_field_key = strtolower($form_field_key);
             if (in_array($form_field_key, $expected_fields)) {
@@ -118,6 +124,8 @@ class UnbounceController extends LeadController
         }
 
         $this->unbounce->notes = implode("\n", $this->notes);
+
+        //Log::info(print_r($this->unbounce,1));
     }
 
     /**
@@ -228,7 +236,7 @@ class UnbounceController extends LeadController
                         $this->last_name,
                         $this->unbounce->email,
                         $this->unbounce->notes,
-                        'New',
+                        '1 New',
                         $this->unbounce->spouse,
                         $this->unbounce->telephone,
                         $this->unbounce->street_address,

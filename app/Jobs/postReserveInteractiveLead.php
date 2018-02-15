@@ -65,7 +65,7 @@ class postReserveInteractiveLead implements ShouldQueue
             'json' => $this->json
         ];
 
-        print_r($arr);
+
 
         // fires the POST request to store the data on the Reserve Interactive API CRM
         $ri = new ReserveInteractive();
@@ -73,15 +73,18 @@ class postReserveInteractiveLead implements ShouldQueue
 
 
         try {
+	        //Log::info(print_r($arr, 1));
+	        //Log::info(print_r($client, 1));
             $r = $client->request('POST', '', $arr);
+	        //Log::info(print_r($r, 1));
             $ri->lead_id = $this->lead_id;
             $ri->request_name = $this->requestName;
             $ri->request_json = (json_encode($this->json)) ? json_encode($this->json) : json_encode(['error']);
             $ri->response = $r->getBody();
 //            print_r($r->getBody());
             $ri->save();
-            $u = User::find(1);
-            $u->notify(new \App\Notifications\ApiError($ri));
+            //$u = User::find(1);
+            //$u->notify(new \App\Notifications\ApiError($ri));
 //            if (strstr($ri->response, 'Failed')) {
 //                $u = User::find(1);
 //                $u->notify(new \App\Notifications\ApiError($ri));
@@ -100,7 +103,6 @@ class postReserveInteractiveLead implements ShouldQueue
 //                $u->notify(new \App\Notifications\ApiError($ri));
 //            }
         }
-
 
     }
 }
