@@ -70,8 +70,6 @@ class postReserveInteractiveLead implements ShouldQueue
         // fires the POST request to store the data on the Reserve Interactive API CRM
         $ri = new ReserveInteractive();
 
-
-
         try {
 	        //Log::info(print_r($arr, 1));
 	        //Log::info(print_r($client, 1));
@@ -81,6 +79,9 @@ class postReserveInteractiveLead implements ShouldQueue
             $ri->request_name = $this->requestName;
             $ri->request_json = (json_encode($this->json)) ? json_encode($this->json) : json_encode(['error']);
             $ri->response = $r->getBody();
+
+	        //Log::info(print_r($r->getBody(), 1));
+
 //            print_r($r->getBody());
             $ri->save();
             //$u = User::find(1);
@@ -90,7 +91,15 @@ class postReserveInteractiveLead implements ShouldQueue
 //                $u->notify(new \App\Notifications\ApiError($ri));
 //            }
 
+
+
+	        //throw new \Exception("testing events leads....");
+
         } catch (\Exception $e) {
+
+        	//Log::info(print_r(json_decode($e->getResponse()->getBody()->getContents()), 1));
+	        //throw new Exception($e->getResponse()->getBody()->getContents());
+
             $ri->lead_id = 0;
             $ri->request_name = 'error';
             $ri->request_json = (json_encode($this->json)) ? json_encode($this->json) : json_encode(['error']);
@@ -102,6 +111,8 @@ class postReserveInteractiveLead implements ShouldQueue
 //                $u = User::find(1);
 //                $u->notify(new \App\Notifications\ApiError($ri));
 //            }
+
+	        //throw new Exception($e->getResponse()->getBody()->getContents());
         }
 
     }

@@ -13,7 +13,7 @@ class UnbounceController extends LeadController
     protected $last_name;
     protected $json;
     protected $publish_to;
-    protected $notes;
+    protected $misc;
 
     /**
      * Sets the ubounce data object.
@@ -25,7 +25,7 @@ class UnbounceController extends LeadController
     {
         $this->publish_to = [];
         $this->unbounce = new Unbounce();
-        $this->notes = [];
+        $this->misc = [];
         $this->json = [];
     }
 
@@ -77,55 +77,47 @@ class UnbounceController extends LeadController
      */
     private function _normalizeInputAndAddToUnbounceObject($form_data)
     {
-    	//Log::info(print_r($form_data,1));
+	    $sites = \Config::get("ri.sites");
 
-        // these are fields that we expect to be in the form_data object, we have to do the same
-        // sanitize on all of them, so, we'll do it in a loop through this array later, some are arrays
-        // some are not, just clean it up
-        $expected_fields = [
-            'name',
-            'first_name',
-            'last_name',
-            'telephone',
-            'email',
-            'division',
-            'club',
-            'owner',
-            'salesperson',
-            'ip_address',
-            'page_uuid',
-            'variant',
-            'time_submitted',
-            'date_submitted',
-            'page_url',
-            'page_name',
-            'spouse',
-            'street_address',
-            'city',
-            'state',
-            'zip'
-        ];
+    	$data = [];
+	    foreach ($form_data as $k => $curr_data) {
+		    $data[strtolower($k)] = $curr_data[0];
+	    }
 
-        if (isset($form_data->notes[0])) {
-            array_push($this->notes, 'notes : ' . $form_data->notes[0]);
-        }
+	    $site_field = isset($data['site']) ? "site" : "club";
 
-        if(!isset($form_data->division) && isset($form_data->divison)) {
-	        $form_data->division = $form_data->divison;
-        }
+	    switch(true) {
+		    case in_array($data[$site_field], $sites):
+		    	break;
+		    case isset($sites[$data[$site_field]]):
+			    $data[$site_field] = $sites[$data[$site_field]];
+			    break;
+		    default:
+			    // No valid Site/Club found.
+		    	$found = false;
+		    	$original_site = $data[$site_field];
+			    $data[$site_field] = trim(preg_replace("/(The|Country|Club|Golf|Course)/i", "", $data[$site_field]));
+				foreach($sites as $short_code => $site_name) {
+					if(preg_match("/{$data[$site_field]}/", $site_name)) {
+						Log::info("FOUND A MATCHING SITE!!!!!");
+						$data[$site_field] = $site_name;
+						$found = true;
+						break;
+					}
+				}
+				if(!$found) {
+					$messageClass            = new class {};
+					$messageClass->status    = "ERROR";
+					$messageClass->message   = "Invalid or missing Site/Club Name ({$original_site})...";
+					$messageClass->form_data = $data;
+					$u = \App\User::find(1);
+					$u->notify(new \App\Notifications\ApiError($messageClass));
+					throw new Exception("Invalid or missing Site/Club Name ({$data[$site_field]})...");
+				}
+		    	break;
+	    }
 
-        foreach ($form_data as $form_field_key => $form_field_value) {
-            $form_field_key = strtolower($form_field_key);
-            if (in_array($form_field_key, $expected_fields)) {
-                $this->unbounce->{$form_field_key} = $form_field_value[0];
-            } else {
-                array_push($this->notes, $form_field_key . " : " . $form_field_value[0]);
-            }
-        }
-
-        $this->unbounce->notes = implode("\n", $this->notes);
-
-        //Log::info(print_r($this->unbounce,1));
+	    $this->unbounce->form_data = serialize($data);
     }
 
     /**
@@ -160,96 +152,39 @@ class UnbounceController extends LeadController
      */
     private function _buildJsonArrayForReserveInteractive($lead_type)
     {
-        if ($lead_type == 'event') { // if it's an "event" lead_type
-            $this->json = [
-                'header' => [
-                    'lead.site.name',
-                    'lead.salesperson.emailAddress',
-                    'lead.owner.emailAddress',
-                    'lead.division.name',
-                    'lead.name',
-                    'lead.contact.firstName',
-                    'lead.contact.lastName',
-                    'lead.contact.email',
-                    'lead.customData(0).tx00',
-                    'lead.leadStatus',
-                    'clubLead.contact.mobilePhone',
-                    'clubLead.contact.mailingAddress.address1',
-                    'clubLead.contact.mailingAddress.city',
-                    'clubLead.contact.mailingAddress.state',
-                    'clubLead.contact.mailingAddress.zipCode'
+		$header = [];
+	    $data   = [];
+	    $used   = [];
+	    $misc   = [];
 
-                ],
-                'data' => [
-                    [
-                        $this->unbounce->club,
-                        $this->unbounce->salesperson,
-                        $this->unbounce->owner,
-                        $this->unbounce->division,
-                        $this->last_name . ' Event',
-                        $this->first_name,
-                        $this->last_name,
-                        $this->unbounce->email,
-                        $this->unbounce->notes,
-                        'New',
-                        $this->unbounce->telephone,
-                        $this->unbounce->street_address,
-                        $this->unbounce->city,
-                        $this->unbounce->state,
-                        $this->unbounce->zip
+	    $form_data = unserialize($this->unbounce->form_data);
 
-                    ]
-                ]
-            ];
-        } elseif ($lead_type == 'member') { // if it's a "member" lead type
-            $this->json = [
-                'header' => [
-                    'clubLead.club',
-                    'clubLead.site.name',
-                    'clubLead.salesperson.emailAddress',
-                    'clubLead.owner.emailAddress',
-                    'clubLead.division.name',
-                    'clubLead.name',
-                    'clubLead.contact.firstName',
-                    'clubLead.contact.lastName',
-                    'clubLead.contact.email',
-                    'clubLead.customData(0).tx00',
-                    'clubLead.leadStatus',
-                    'clubLead.customData(0).tx03',
-                    'clubLead.contact.mobilePhone',
-                    'clubLead.contact.mailingAddress.address1',
-                    'clubLead.contact.mailingAddress.city',
-                    'clubLead.contact.mailingAddress.state',
-                    'clubLead.contact.mailingAddress.zipCode'
+	    foreach(\Config::get("ri.fields.{$lead_type}") AS $subtype => $collection) {
+	    	foreach($collection as $ri_field => $metadata) {
+				foreach($metadata['unbounce'] as $ub_field) {
+					if(isset($form_data[$ub_field])) {
+						$header[] = $ri_field;
+						$data[]   = $form_data[$ub_field];
+						$used[]   = $ub_field;
+					}
+				}
+		    }
+	    }
 
+	    foreach($form_data as $k => $v) {
+	    	if(!in_array($k, $used)) {
+			    $misc[] = ucwords(str_replace("_", " ", $k)) . " : {$v}";
+		    }
+	    }
 
-                ],
-                'data' => [
-                    [
-                        $this->unbounce->club,
-                        $this->unbounce->club,
-                        $this->unbounce->salesperson,
-                        $this->unbounce->owner,
-                        $this->unbounce->division,
-                        $this->first_name . ' ' . $this->last_name,
-                        $this->first_name,
-                        $this->last_name,
-                        $this->unbounce->email,
-                        $this->unbounce->notes,
-                        '1 New',
-                        $this->unbounce->spouse,
-                        $this->unbounce->telephone,
-                        $this->unbounce->street_address,
-                        $this->unbounce->city,
-                        $this->unbounce->state,
-                        $this->unbounce->zip
+	    if(count($misc)) {
+	    	$header[] = \Config::get("ri.fields.misc.{$lead_type}");
+		    $data[]   = implode("<br />\n", $misc);
+	    }
 
-                    ]
-                ]
-            ];
-        }
+	    $this->json['header'] = $header;
+	    $this->json['data'][] = $data;
 
-        return $this->json;
-
+	    return $this->json;
     }
 }
