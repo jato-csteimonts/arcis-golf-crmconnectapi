@@ -59,6 +59,10 @@ return [
 			"member" => "clubLead.customData(0).tx00",
 			"event"  => "lead.leadNotes.notes",
 		],
+		"status"   => [
+			"member" => "clubLead.leadStatus",
+			"event"  => "lead.leadStatus",
+		],
 		"member" => [
 			"member-lead"     => [
 				"clubLead.customData(0).tx01"  => [
@@ -109,6 +113,9 @@ return [
 				"clubLead.leadStatus"          => [
 					"verbose"  => "lead status",
 					"unbounce" => [],
+					"values"   => [
+						"new" => "1 New",
+					],
 				],
 				"clubLead.leadType"            => [
 					"verbose"  => "lead type",
@@ -355,6 +362,9 @@ return [
 				"lead.leadStatus"          => [
 					"verbose"  => "Lead Status",
 					"unbounce" => [],
+					"values"   => [
+						"new" => "New",
+					],
 				],
 				"lead.leadType"            => [
 					"verbose"  => "Lead Type",
@@ -420,8 +430,7 @@ return [
 				"lead.owner.emailAddress" => [
 					"verbose"  => "Owner Email",
 					"unbounce" => [
-						"owner",
-						"salesperson",
+						"owner"
 					],
 				],
 				"lead.owner.firstName"    => [

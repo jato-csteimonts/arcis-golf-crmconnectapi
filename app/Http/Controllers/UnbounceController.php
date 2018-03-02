@@ -89,6 +89,10 @@ class UnbounceController extends LeadController
 	    switch(true) {
 		    case in_array($data[$site_field], $sites):
 		    	break;
+		    case count($matches = preg_grep("/{$data[$site_field]}/i", $sites)):
+			    $matches = array_values($matches);
+			    $data[$site_field] = $matches[0];
+			    break;
 		    case isset($sites[$data[$site_field]]):
 			    $data[$site_field] = $sites[$data[$site_field]];
 			    break;
@@ -116,6 +120,12 @@ class UnbounceController extends LeadController
 				}
 		    	break;
 	    }
+
+	    ////////////////////////////////////////
+	    // Do some checks on "Division" field
+	    //
+	    $div_field = isset($data['division']) ? "division" : "divison";
+	    $data[$div_field] = ucwords(strtolower(trim(preg_replace("/(private|public)(.*)/i", "$1 Division", $data[$div_field]))));
 
 	    $this->unbounce->form_data = serialize($data);
     }
@@ -163,9 +173,11 @@ class UnbounceController extends LeadController
 	    	foreach($collection as $ri_field => $metadata) {
 				foreach($metadata['unbounce'] as $ub_field) {
 					if(isset($form_data[$ub_field])) {
-						$header[] = $ri_field;
-						$data[]   = $form_data[$ub_field];
-						$used[]   = $ub_field;
+						if(!in_array($ri_field, $header)) {
+							$header[] = $ri_field;
+							$data[]   = $form_data[$ub_field];
+							$used[]   = $ub_field;
+						}
 					}
 				}
 		    }
@@ -182,8 +194,15 @@ class UnbounceController extends LeadController
 		    $data[]   = implode("<br />\n", $misc);
 	    }
 
+	    $status_field = \Config::get("ri.fields.status.{$lead_type}");
+	    $fields = \Config::get("ri.fields.{$lead_type}.{$lead_type}-lead");
+	    $header[] = $status_field;
+		$data[]   = $fields[$status_field]['values']['new'];
+
 	    $this->json['header'] = $header;
 	    $this->json['data'][] = $data;
+
+	    //Log::info(print_r($this->json,1));
 
 	    return $this->json;
     }

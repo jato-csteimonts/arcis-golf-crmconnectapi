@@ -71,48 +71,38 @@ class postReserveInteractiveLead implements ShouldQueue
         $ri = new ReserveInteractive();
 
         try {
-	        //Log::info(print_r($arr, 1));
-	        //Log::info(print_r($client, 1));
             $r = $client->request('POST', '', $arr);
-	        //Log::info(print_r($r, 1));
             $ri->lead_id = $this->lead_id;
             $ri->request_name = $this->requestName;
             $ri->request_json = (json_encode($this->json)) ? json_encode($this->json) : json_encode(['error']);
             $ri->response = $r->getBody();
-
-	        //Log::info(print_r($r->getBody(), 1));
-
-//            print_r($r->getBody());
             $ri->save();
-            //$u = User::find(1);
-            //$u->notify(new \App\Notifications\ApiError($ri));
-//            if (strstr($ri->response, 'Failed')) {
-//                $u = User::find(1);
-//                $u->notify(new \App\Notifications\ApiError($ri));
-//            }
 
+            if (!strstr($ri->response, 'Created')) {
+	            $response = json_decode($ri->response);
+	            $messageClass            = new class {};
+	            $messageClass->status    = "ERROR";
+	            $messageClass->messages  = $response->results[0]->messages;
+	            $messageClass->json      = $arr['json'];
+	            throw new \Exception(json_encode($messageClass));
+            }
 
+        } catch (\GuzzleHttp\Exception\ServerException $e) {
 
-	        //throw new \Exception("testing events leads....");
-
-        } catch (\Exception $e) {
-
-        	//Log::info(print_r(json_decode($e->getResponse()->getBody()->getContents()), 1));
-	        //throw new Exception($e->getResponse()->getBody()->getContents());
-
-            $ri->lead_id = 0;
+            $ri->lead_id = $this->lead_id;
             $ri->request_name = 'error';
             $ri->request_json = (json_encode($this->json)) ? json_encode($this->json) : json_encode(['error']);
             $ri->response = $e->getResponse()->getBody()->getContents();
             $ri->save();
-            $u = User::find(1);
-            $u->notify(new \App\Notifications\ApiError($ri));
-//            if (strstr($ri->response, 'Failed')) {
-//                $u = User::find(1);
-//                $u->notify(new \App\Notifications\ApiError($ri));
-//            }
 
-	        //throw new Exception($e->getResponse()->getBody()->getContents());
+	        $response = json_decode($ri->response);
+
+	        $messageClass            = new class {};
+	        $messageClass->status    = "ERROR";
+	        $messageClass->messages  = $response->messages;
+	        $messageClass->json      = $arr['json'];
+
+	        throw new \Exception(json_encode($messageClass));
         }
 
     }

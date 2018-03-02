@@ -42,14 +42,17 @@ class LeadController extends Controller
 
     protected function _publishToReserveInteractive($v)
     {
-        // we expect a "lead_type" field to determine which requestName to use for Reserve Interactive
         $requestName = 'MemberLeadImport';
         if (isset($v['form_data']->lead_type[0])) {
             if ($v['form_data']->lead_type[0]  == 'event')
             $requestName = 'EventLeadImport';
         }
-        // dispatches the job that pushes to the Reserve Interactive CRM
-        // Log::info($v['lead']->id);
-        $this->dispatch(new postReserveInteractiveLead($requestName, $v['json'], $v['lead']->id));
+	    try {
+		    $this->dispatch(new postReserveInteractiveLead($requestName, $v['json'], $v['lead']->id));
+	    } catch (\Exception $e) {
+		    $u = \App\User::find(1);
+		    $u->notify(new \App\Notifications\ApiError(json_decode($e->getMessage())));
+		    abort(500, $e->getMessage());
+	    }
     }
 }
