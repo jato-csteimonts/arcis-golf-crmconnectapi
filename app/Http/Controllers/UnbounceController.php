@@ -162,6 +162,8 @@ class UnbounceController extends LeadController
      */
     private function _buildJsonArrayForReserveInteractive($lead_type)
     {
+	    $lead_type = strtolower($lead_type);
+
 		$header = [];
 	    $data   = [];
 	    $used   = [];
