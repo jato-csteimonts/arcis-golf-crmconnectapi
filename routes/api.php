@@ -12,11 +12,11 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+$serviceProviders = [
+	"unbounce"   => "UnBounce",
+	"distribion" => "Distribion",
+];
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-Route::group(['middleware' => ['check_domain', 'cors']], function() {
-    Route::any('/webforms', 'WebformController@process');
-});
+foreach($serviceProviders as $type => $controller) {
+	Route::post($type, "Webhooks\\{$controller}@process");
+}

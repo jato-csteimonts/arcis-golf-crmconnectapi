@@ -1,58 +1,58 @@
 <?php
 return [
 	"sites"  => [
-		"IHGC"   => "Iron Horse Golf Course",
-		"410"    => "Hunt Valley Golf Club",
-		"229"    => "Tatum Ranch Golf Club",
-		"CCGC"   => "Clear Creek Golf Club",
-		"PDGC"   => "Painted Desert Golf Club",
-		"PHGC"   => "Park Hill Golf Club",
-		"MGC"    => "Meadowlark Golf Course",
-		"GCACR"  => "Golf Club at Cinco Ranch",
-		"RFGC"   => "Ruffled Feathers Golf Course",
-		"MCGC"   => "Mill Creek Golf Club",
-		"411"    => "Montgomery Country Club",
-		"401"    => "LakeRidge Country Club",
-		"CGC"    => "Cowboys Golf Club",
-		"406"    => "Weymouth Country Club",
-		"416"    => "TPC Valencia",
-		"702"    => "LaCentre",
-		"228"    => "Superstition Springs Golf Club",
-		"DPGC"   => "Desert Pines Golf Club",
-		"673"    => "Stonecreek Golf Club",
-		"DLBGC"  => "David L. Baker Golf Course",
-		"412"    => "Broad Bay Golf Club (Traditions)",
-		"423"    => "The Club at Snoqualmie Ridge",
-		"428"    => "Arrowhead Country Club",
-		"CAFP"   => "Courses at Forest Park",
-		"LVGC"   => "Las Vegas Golf Club",
-		"242"    => "Kokopelli Golf Course",
-		"WTGC"   => "Whitetail Ridge Golf Club",
-		"424"    => "Tartan Fields",
-		"405"    => "Fox Meadow Country Club",
-		"CSGC"   => "Canyon Springs Golf Club",
-		"TCC"    => "TallGrass Country Club",
-		"703"    => "LPGA International",
-		"LRGC"   => "Los Robles Golf Course",
-		"425"    => "Ruby Hill Golf Club",
-		"PGC"    => "Plantation Golf Club",
-		"429"    => "The Legend at Arrowhead",
-		"427"    => "Ancala Country Club",
-		"TGCAFC" => "The Golf Club Fossil Creek",
-		"DCGC"   => "Deer Creek Golf Club",
-		"TGC"    => "Tamarack Golf Club",
-		"422"    => "Pinery Country Club",
-		"SHGC"   => "Shandin Hills Golf Club",
-		"418"    => "Valencia Country Club",
-		"498"    => "Eagle Brook Country Club",
-		"MOGC"   => "Majestic Oaks Golf Club",
-		"AGC"    => "Arrowhead Golf Club",
-		"487"    => "Meadowbrook Country Club",
-		"407"    => "Signature of Solon Country Club",
-		"421"    => "The Club at Pradera",
-		"BCGC"   => "Bear Creek Golf Club",
-		"TCGC"   => "The Golf Club at Twin Creeks",
-		"227"    => "Raven Phoenix Golf Club",
+		"427"  => "Ancala Country Club",
+		"428"  => "Arrowhead Country Club",
+		"186"  => "Arrowhead Golf Club",
+		"126"  => "Bear Creek Golf Club",
+		"412"  => "Broad Bay Golf Club (Traditions)",
+		"113"  => "Canyon Springs Golf Club",
+		"117"  => "Clear Creek Golf Club",
+		"171"  => "Courses at Forest Park",
+		"118"  => "Cowboys Golf Club",
+		"163"  => "David L. Baker Golf Course",
+		"DCGC" => "Deer Creek Golf Club",
+		"746"  => "Desert Pines Golf Club",
+		"498"  => "Eagle Brook Country Club",
+		"405"  => "Fox Meadow Country Club",
+		"114"  => "Golf Club at Cinco Ranch",
+		"410"  => "Hunt Valley Golf Club",
+		"717"  => "Iron Horse Golf Course",
+		"242"  => "Kokopelli Golf Course",
+		"702"  => "LaCentre",
+		"401"  => "LakeRidge Country Club",
+		"792"  => "Las Vegas Golf Club",
+		"750"  => "Los Robles Golf Course",
+		"703"  => "LPGA International",
+		"659"  => "Majestic Oaks Golf Club",
+		"487"  => "Meadowbrook Country Club",
+		"152"  => "Meadowlark Golf Course",
+		"658"  => "Mill Creek Golf Club",
+		"411"  => "Montgomery Country Club",
+		"177"  => "Painted Desert Golf Club",
+		"696"  => "Park Hill Golf Club",
+		"422"  => "Pinery Country Club",
+		"116"  => "Plantation Golf Club",
+		"227"  => "Raven Phoenix Golf Club",
+		"425"  => "Ruby Hill Golf Club",
+		"272"  => "Ruffled Feathers Golf Course",
+		"783"  => "Shandin Hills Golf Club",
+		"407"  => "Signature of Solon Country Club",
+		"673"  => "Stonecreek Golf Club",
+		"228"  => "Superstition Springs Golf Club",
+		"TCC"  => "TallGrass Country Club",
+		"674"  => "Tamarack Golf Club",
+		"424"  => "Tartan Fields",
+		"229"  => "Tatum Ranch Golf Club",
+		"421"  => "The Club at Pradera",
+		"423"  => "The Club at Snoqualmie Ridge",
+		"740"  => "The Golf Club at Twin Creeks",
+		"115"  => "The Golf Club Fossil Creek",
+		"429"  => "The Legend at Arrowhead",
+		"416"  => "The Oaks Club at Valencia",
+		"418"  => "Valencia Country Club",
+		"406"  => "Weymouth Country Club",
+		"755"  => "Whitetail Ridge Golf Club",
 	],
 	"fields" => [
 		"misc"   => [
@@ -67,218 +67,221 @@ return [
 			"member-lead"     => [
 				"clubLead.customData(0).tx01"  => [
 					"verbose"  => "campaign attribution",
-					"unbounce" => [
+					"possible" => [
 						"campaign_attribution",
 						"campaign",
 					],
 				],
 				"clubLead.club"                => [
 					"verbose"  => "club name",
-					"unbounce" => [
+					"possible" => [
 						"club",
 						"site",
 					],
 				],
 				"clubLead.customData(0).tx02"  => [
 					"verbose"  => "do not use - inactive custom field",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"clubLead.decisionDate"        => [
 					"verbose"  => "decision date",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"clubLead.description"         => [
 					"verbose"  => "description",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"clubLead.division.name"       => [
 					"verbose"  => "division",
-					"unbounce" => [
+					"possible" => [
 						"division",
 						"divison",
 					],
 				],
 				"clubLead.name"                => [
 					"verbose"  => "lead name",
-					"unbounce" => [],
+					"possible" => [
+						"lead_name"
+					],
 				],
 				"clubLead.customData(0).o00"   => [
 					"verbose"  => "lead source",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"clubLead.customData(0).tx04"  => [
 					"verbose"  => "lead source details",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"clubLead.leadStatus"          => [
 					"verbose"  => "lead status",
-					"unbounce" => [],
+					"possible" => [],
 					"values"   => [
 						"new" => "1 New",
 					],
 				],
 				"clubLead.leadType"            => [
 					"verbose"  => "lead type",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"clubLead.customData(0).tx05"  => [
 					"verbose"  => "lead/membership description",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"clubLead.clubLeadNotes.notes" => [
 					"verbose"  => "member lead notes",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"clubLead.membershipTypeList"  => [
 					"verbose"  => "new membership type",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"clubLead.customData(0).tx00"  => [
 					"verbose"  => "notes",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"clubLead.customData(0).o02"   => [
 					"verbose"  => "objections",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"clubLead.customData(0).i00"   => [
 					"verbose"  => "probability (%)",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"clubLead.referral"            => [
 					"verbose"  => "referral type",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"clubLead.site.name"           => [
 					"verbose"  => "site",
-					"unbounce" => [
+					"possible" => [
 						"club",
 						"site",
 					],
 				],
 				"clubLead.site.code"           => [
 					"verbose"  => "site code",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"clubLead.site.siteType.value" => [
 					"verbose"  => "site type",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"clubLead.customData(0).tx03"  => [
 					"verbose"  => "spouse",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"clubLead.uniqueId"            => [
 					"verbose"  => "unique id",
-					"unbounce" => [],
+					"possible" => [],
 				],
 			],
 			"owner"           => [
 				"clubLead.owner.emailAddress" => [
 					"verbose"  => "Owner Email",
-					"unbounce" => [
+					"possible" => [
 						"owner",
 					],
 				],
 				"clubLead.owner.firstName"    => [
 					"verbose"  => "Owner First Name",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"clubLead.owner.initials"     => [
 					"verbose"  => "Owner Initials",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"clubLead.owner.lastName"     => [
 					"verbose"  => "Owner Last Name",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"clubLead.owner.username"     => [
 					"verbose"  => "Owner Username",
-					"unbounce" => [],
+					"possible" => [],
 				],
 			],
 			"primary-contact" => [
 				"clubLead.contact.uniqueId"                => [
 					"verbose"  => "Contact Unique ID",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"clubLead.contact.email"                   => [
 					"verbose"  => "Primary Contact Email",
-					"unbounce" => [
+					"possible" => [
 						"email",
 					],
 				],
 				"clubLead.contact.firstName"               => [
 					"verbose"  => "Primary Contact First Name",
-					"unbounce" => [
+					"possible" => [
 						"first_name",
 					],
 				],
 				"clubLead.contact.homePhone"               => [
 					"verbose"  => "Primary Contact Home Phone",
-					"unbounce" => [
+					"possible" => [
 						"phone",
 						"telephone",
 						"phone_number",
+						"phone_no",
 					],
 				],
 				"clubLead.contact.lastName"                => [
 					"verbose"  => "Primary Contact Last Name",
-					"unbounce" => [
+					"possible" => [
 						"last_name",
 					],
 				],
 				"clubLead.contact.mailingAddress.city"     => [
 					"verbose"  => "Primary Contact Mailing Address City",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"clubLead.contact.mailingAddress.country"  => [
 					"verbose"  => "Primary Contact Mailing Address Country",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"clubLead.contact.mailingAddress.address1" => [
 					"verbose"  => "Primary Contact Mailing Address Line 1",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"clubLead.contact.mailingAddress.address2" => [
 					"verbose"  => "Primary Contact Mailing Address Line 2",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"clubLead.contact.mailingAddress.state"    => [
 					"verbose"  => "Primary Contact Mailing Address State",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"clubLead.contact.mailingAddress.zipCode"  => [
 					"verbose"  => "Primary Contact Mailing Address Zip Code",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"clubLead.contact.mobilePhone"             => [
 					"verbose"  => "Primary Contact Mobile Phone",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"clubLead.contact.workPhone"               => [
 					"verbose"  => "Primary Contact Work Phone",
-					"unbounce" => [],
+					"possible" => [],
 				],
 			],
 			"salesperson"     => [
 				"clubLead.salesperson.emailAddress" => [
 					"verbose"  => "Salesperson Email",
-					"unbounce" => [
+					"possible" => [
 						"salesperson",
 					],
 				],
 				"clubLead.salesperson.firstName"    => [
 					"verbose"  => "Salesperson First Name",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"clubLead.salesperson.lastName"     => [
 					"verbose"  => "Salesperson Last Name",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"clubLead.salesperson.username"     => [
 					"verbose"  => "Salesperson Username",
-					"unbounce" => [],
+					"possible" => [],
 				],
 			]
 		],
@@ -286,248 +289,260 @@ return [
 			"event-lead"      => [
 				"lead.billingNotes"        => [
 					"verbose"  => "Billing Notes",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"lead.budget"              => [
 					"verbose"  => "Budget",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"lead.customData(0).tx02"  => [
 					"verbose"  => "Client ID",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"lead.customData(0).tx03"  => [
 					"verbose"  => "Company / Title",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"lead.customData(0).b00"   => [
 					"verbose"  => "Dates Flexible",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"lead.decisionDate"        => [
 					"verbose"  => "Decision Date",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"lead.description"         => [
 					"verbose"  => "Description",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"lead.division.name"       => [
 					"verbose"  => "Division",
-					"unbounce" => [
+					"possible" => [
 						"division",
 						"divison",
 					],
 				],
 				"lead.customData(0).tx01"  => [
 					"verbose"  => "End Date",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"lead.endTime"             => [
 					"verbose"  => "End Time",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"lead.estimatedAttendance" => [
 					"verbose"  => "Estimated Attendance",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"lead.eventDate"           => [
 					"verbose"  => "Event Date",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"lead.eventDate_verbose"   => [
 					"verbose"  => "Event Day/Date",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"lead.customData(0).tx00"  => [
 					"verbose"  => "Event Information",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"lead.leadNotes.notes"     => [
 					"verbose"  => "Event Lead Notes",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"lead.functionType"        => [
 					"verbose"  => "Function Type",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"lead.eventType"           => [
 					"verbose"  => "Lead Event Type",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"lead.name"                => [
 					"verbose"  => "Lead Name",
-					"unbounce" => [],
+					"possible" => [
+						"lead_name"
+					],
 				],
 				"lead.leadStatus"          => [
 					"verbose"  => "Lead Status",
-					"unbounce" => [],
+					"possible" => [],
 					"values"   => [
 						"new" => "New",
 					],
 				],
 				"lead.leadType"            => [
 					"verbose"  => "Lead Type",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"lead.locations"           => [
 					"verbose"  => "Location",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"lead.customData(0).tx05"  => [
 					"verbose"  => "Medium",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"lead.probability"         => [
 					"verbose"  => "Probability",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"lead.referral"            => [
 					"verbose"  => "Referral Type",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"lead.site.name"           => [
 					"verbose"  => "Site",
-					"unbounce" => [
+					"possible" => [
 						"club",
+						"site",
 					],
 				],
 				"lead.site.code"           => [
 					"verbose"  => "Site Code",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"lead.site.siteType.value" => [
 					"verbose"  => "Site Type",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"lead.customData(0).tx04"  => [
 					"verbose"  => "Source",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"lead.eventTime"           => [
 					"verbose"  => "Start Time",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"lead.uniqueId"            => [
 					"verbose"  => "Unique ID",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"lead.customData(0).tx06"  => [
 					"verbose"  => "Preferred Event Date",
-					"unbounce" => [
+					"possible" => [
 						"preferred_event_date"
 					],
 				],
 				"lead.customData(0).tx07"  => [
 					"verbose"  => "Campaign Attribution",
-					"unbounce" => [
+					"possible" => [
 						"campaign_attribution",
 						"campaign",
 					],
 				],
+				"lead.customData(0).tx08"   => [
+					"verbose"  => "Expected Number of Guests",
+					"possible" => [
+						"expected_number_of_guests",
+					],
+				],
+
 			],
 			"owner"           => [
 				"lead.owner.emailAddress" => [
 					"verbose"  => "Owner Email",
-					"unbounce" => [
+					"possible" => [
 						"owner"
 					],
 				],
 				"lead.owner.firstName"    => [
 					"verbose"  => "Owner First Name",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"lead.owner.initials"     => [
 					"verbose"  => "Owner Initials",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"lead.owner.lastName"     => [
 					"verbose"  => "Owner Last Name",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"lead.owner.username"     => [
 					"verbose"  => "Owner Username",
-					"unbounce" => [],
+					"possible" => [],
 				],
 			],
 			"primary-contact" => [
 				"lead.contact.email"                   => [
 					"verbose"  => "Primary Contact Email",
-					"unbounce" => [
+					"possible" => [
 						"email",
 					],
 				],
 				"lead.contact.firstName"               => [
 					"verbose"  => "Primary Contact First Name",
-					"unbounce" => [
+					"possible" => [
 						"first_name",
 					],
 				],
 				"lead.contact.homePhone"               => [
 					"verbose"  => "Primary Contact Home Phone",
-					"unbounce" => [
+					"possible" => [
 						"phone",
 						"telephone",
 						"phone_number",
+						"phone_no",
+
 					],
 				],
 				"lead.contact.lastName"                => [
 					"verbose"  => "Primary Contact Last Name",
-					"unbounce" => [
+					"possible" => [
 						"last_name",
 					],
 				],
 				"lead.contact.mailingAddress.city"     => [
 					"verbose"  => "Primary Contact Mailing Address City",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"lead.contact.mailingAddress.country"  => [
 					"verbose"  => "Primary Contact Mailing Address Country",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"lead.contact.mailingAddress.address1" => [
 					"verbose"  => "Primary Contact Mailing Address Line 1",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"lead.contact.mailingAddress.address2" => [
 					"verbose"  => "Primary Contact Mailing Address Line 2",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"lead.contact.mailingAddress.state"    => [
 					"verbose"  => "Primary Contact Mailing Address State",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"lead.contact.mailingAddress.zipCode"  => [
 					"verbose"  => "Primary Contact Mailing Address Zip Code",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"lead.contact.mobilePhone"             => [
 					"verbose"  => "Primary Contact Mobile Phone",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"lead.contact.workPhone"               => [
 					"verbose"  => "Primary Contact Work Phone",
-					"unbounce" => [],
+					"possible" => [],
 				],
 			],
 			"salesperson"     => [
 				"lead.salesperson.emailAddress" => [
 					"verbose"  => "Salesperson Email",
-					"unbounce" => [
+					"possible" => [
 						"salesperson",
 					],
 				],
 				"lead.salesperson.firstName"    => [
 					"verbose"  => "Salesperson First Name",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"lead.salesperson.lastName"     => [
 					"verbose"  => "Salesperson Last Name",
-					"unbounce" => [],
+					"possible" => [],
 				],
 				"lead.salesperson.username"     => [
 					"verbose"  => "Salesperson Username",
-					"unbounce" => [],
+					"possible" => [],
 				],
 			]
 		]

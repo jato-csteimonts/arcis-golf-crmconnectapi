@@ -65,12 +65,13 @@ class postReserveInteractiveLead implements ShouldQueue
             'json' => $this->json
         ];
 
-
-
         // fires the POST request to store the data on the Reserve Interactive API CRM
         $ri = new ReserveInteractive();
 
         try {
+
+        	Log::info(print_r($arr,1));
+
             $r = $client->request('POST', '', $arr);
             $ri->lead_id = $this->lead_id;
             $ri->request_name = $this->requestName;
@@ -84,6 +85,8 @@ class postReserveInteractiveLead implements ShouldQueue
 	            $messageClass->status    = "ERROR";
 	            $messageClass->messages  = $response->results[0]->messages;
 	            $messageClass->json      = $arr['json'];
+	            Log::info("1");
+	            Log::info(print_r($messageClass,1));
 	            throw new \Exception(json_encode($messageClass));
             }
 
@@ -101,6 +104,29 @@ class postReserveInteractiveLead implements ShouldQueue
 	        $messageClass->status    = "ERROR";
 	        $messageClass->messages  = $response->messages;
 	        $messageClass->json      = $arr['json'];
+
+	        Log::info("2");
+	        Log::info(print_r($messageClass,1));
+
+	        throw new \Exception(json_encode($messageClass));
+
+        } catch (\GuzzleHttp\Exception\ClientException $e) {
+
+	        $ri->lead_id = $this->lead_id;
+	        $ri->request_name = 'error';
+	        $ri->request_json = (json_encode($this->json)) ? json_encode($this->json) : json_encode(['error']);
+	        $ri->response = $e->getResponse()->getBody(true);
+	        $ri->save();
+
+	        $response = json_decode($ri->response);
+
+	        $messageClass            = new class {};
+	        $messageClass->status    = "ERROR";
+	        $messageClass->messages  = $response->messages;
+	        $messageClass->json      = $arr['json'];
+
+	        Log::info("3");
+	        Log::info(print_r($messageClass,1));
 
 	        throw new \Exception(json_encode($messageClass));
         }

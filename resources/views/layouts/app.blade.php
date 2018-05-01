@@ -64,6 +64,11 @@
                                     <li>
                                         <a href="/admin/users">Users</a>
                                     </li>
+
+                                    <li>
+                                        <a href="/admin/clubs">Clubs</a>
+                                    </li>
+
                                     <li>
                                         <a href="/admin/domains">Domains</a>
                                     </li>

@@ -26,7 +26,9 @@ Route::any('/register', function() {
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::post('/unbounce/webhook', 'UnbounceController@webhook');
+//Route::post('/unbounce/webhook', 'UnbounceController@webhook');
+Route::post('/unbounce/webhook', "Webhooks\\UnBounce@process"); // Catch old Webhooks and route them to the new processing system
+Route::post('/webforms', 'WebformController@process');
 
 Route::get('/admin/reports/update', 'Admin\ReportController@update');
 Route::get('/admin/reports/show', 'Admin\ReportController@show');
@@ -38,6 +40,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('/admin/reserveinteractives', 'Admin\ReserveInteractiveController');
     Route::resource('/admin/domains', 'Admin\DomainController');
     Route::resource('/admin/fields', 'Admin\FieldController');
+	Route::resource('/admin/clubs', 'Admin\ClubController');
 
 });
 
