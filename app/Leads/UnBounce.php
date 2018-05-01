@@ -32,7 +32,7 @@ class UnBounce extends Base {
 
 		//$out['membership_type'] = isset($out['please_choose_a_membership_type']) ? $out['please_choose_a_membership_type'] : NULL;
 
-		\Log::info(print_r($out,1));
+		//\Log::info(print_r($out,1));
 
 		return $out;
 

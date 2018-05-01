@@ -51,9 +51,25 @@ class Distribion extends Base {
 			$this->pushToCRM($Lead);
 
 		} catch (\Exception $e) {
+
+			if(preg_match("/^\{/", $e->getMessage())) {
+				$messageClass = json_decode($e->getMessage());
+				$messageClass->FileName = $e->getFile();
+				$messageClass->LineNumber = $e->getLine();
+			} else {
+				$messageClass = new class {};
+				$messageClass->message = $e->getMessage();
+				$messageClass->fileName = $e->getFile();
+				$messageClass->lineNumber = $e->getLine();
+				$messageClass->request = $request->toArray();
+				$messageClass->lead = $Lead->toArray();
+			}
+
+			//\Log::info($e->getMessage());
 			$u = \App\User::find(1);
-			$u->notify(new \App\Notifications\ApiError(json_decode($e->getMessage())));
+			$u->notify(new \App\Notifications\ApiError($messageClass));
 			abort(500, $e->getMessage());
+
 		}
 
 	}

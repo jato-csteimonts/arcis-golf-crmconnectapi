@@ -30,7 +30,7 @@ class UnBounce extends Base {
 			$Lead->source             = $data['source'];
 			$Lead->data               = serialize($data);
 
-			$Club = \App\Club::where("site_code", $data['site'])->orWhere("name", $data['site'])->firstOrFail();
+			$Club = \App\Club::where("site_code", $data['site'])->orWhere("name", "LIKE", "%{$data['site']}%")->firstOrFail();
 			$Lead->club_id            = $Club->id;
 
 			// Get Sales Person
@@ -59,8 +59,23 @@ class UnBounce extends Base {
 			//abort(500, json_encode(["errors" => "Testing new UnBounce webhooks"]));
 
 		} catch (\Exception $e) {
+
+			if(preg_match("/^\{/", $e->getMessage())) {
+				$messageClass = json_decode($e->getMessage());
+				$messageClass->FileName = $e->getFile();
+				$messageClass->LineNumber = $e->getLine();
+			} else {
+				$messageClass = new class {};
+				$messageClass->message = $e->getMessage();
+				$messageClass->fileName = $e->getFile();
+				$messageClass->lineNumber = $e->getLine();
+				$messageClass->request = $request->toArray();
+				$messageClass->lead = $Lead->toArray();
+			}
+
+			//\Log::info($e->getMessage());
 			$u = \App\User::find(1);
-			$u->notify(new \App\Notifications\ApiError(json_decode($e->getMessage())));
+			$u->notify(new \App\Notifications\ApiError($messageClass));
 			abort(500, $e->getMessage());
 		}
 
