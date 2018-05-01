@@ -21,7 +21,7 @@ class Distribion extends Base {
 		$out['last_name']   = $data[1];
 		$out['email']       = $data[2];
 		$out['phone']       = $data[3];
-		$out['interests']   = implode(", ", array_keys($data[4]));
+		$out['interests']   = is_array($data[4]) ? implode(", ", (array_keys($data[4]))) : "";
 		$out['comments']    = $data[5];
 		$out['campaign']    = $data[6];
 		$out['source']      = strtolower(parse_url((preg_match("/^http/", $data[7]) ? "" : "http://") . $data[7], PHP_URL_HOST));
