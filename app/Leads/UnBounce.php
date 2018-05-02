@@ -23,7 +23,7 @@ class UnBounce extends Base {
 		}
 
 		$out['sub_type']        = $out['lead_type'];
-		$out['source']          = preg_replace("/^http([s]?):\/\//", "", $out['page_url']);
+		$out['source']          = isset($out['page_url']) ? preg_replace("/^http([s]?):\/\//", "", $out['page_url']) : "";
 
 		if(isset($out['club'])) {
 			$out['site'] = $out['club'];
