@@ -47,7 +47,7 @@ class Base {
 				env('RESERVE_INTERACTIVE_PASSWORD')
 			],
 			'query' => [
-				'requestName' => ($Lead->sub_type == "member" ? "Member" : "Event") . "LeadImport",
+				'requestName' => (strtolower($Lead->sub_type) == "member" ? "Member" : "Event") . "LeadImport",
 				'requestGuid' => md5(date('YmdHis')),
 				//'mode'        => 'test',
 				'mode'        => 'apply',
