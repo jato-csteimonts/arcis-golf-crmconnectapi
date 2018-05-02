@@ -23,15 +23,15 @@ class UnBounce extends Base {
 
 			$Lead->webhook_request_id = $WebhookRequest->id;
 			$Lead->sub_type           = $data['sub_type'];
-			$Lead->first_name         = $data['first_name'];
-			$Lead->last_name          = $data['last_name'];
+			$Lead->first_name         = $data['first_name'] ?? null;
+			$Lead->last_name          = $data['last_name'] ?? null;
 			$Lead->email              = $data['email'];
-			$Lead->phone              = $data['phone'];
+			$Lead->phone              = $data['phone'] ?? null;
 			$Lead->source             = $data['source'];
 			$Lead->data               = serialize($data);
 
-			$Club = \App\Club::where("site_code", $data['site'])->orWhere("name", "LIKE", "%{$data['site']}%")->firstOrFail();
-			$Lead->club_id            = $Club->id;
+			$Club          = \App\Club::where("site_code", $data['site'])->orWhere("name", "LIKE", "%{$data['site']}%")->firstOrFail();
+			$Lead->club_id = $Club->id;
 
 			// Get Sales Person
 			if($data['salesperson']) {

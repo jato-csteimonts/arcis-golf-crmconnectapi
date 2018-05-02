@@ -16,6 +16,11 @@ class Distribion extends Base {
 
 		//\Log::info(print_r($data,1));
 
+		if(count($data) == 7) {
+			$data = array_merge(array_slice($data, 0, 4), [[]], array_slice($data, 4));
+			//\Log::info(print_r($data,1));
+		}
+
 		$out['sub_type']    = "member"; // For now, all leads coming from DISTRIBION are of the "member" variety....
 		$out['first_name']  = $data[0];
 		$out['last_name']   = $data[1];
