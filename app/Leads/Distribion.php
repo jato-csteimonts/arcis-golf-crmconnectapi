@@ -31,6 +31,18 @@ class Distribion extends Base {
 		$out['campaign']    = $data[6];
 		$out['source']      = strtolower(parse_url((preg_match("/^http/", $data[7]) ? "" : "http://") . $data[7], PHP_URL_HOST));
 
+		switch(true) {
+			case !$out['email']:
+				throw new \Exception("Missing required email address, aborting...");
+				break;
+			case !filter_var($out['email'], FILTER_VALIDATE_EMAIL):
+				throw new \Exception("Invalid email address ({$out['email']}), aborting...");
+				break;
+			case !$out['last_name']:
+				throw new \Exception("Reserve Interactive requires a contact to have a last name. No last name provided, aborting...");
+				break;
+		}
+
 		//\Log::info(print_r($out,1));
 
 		return $out;
