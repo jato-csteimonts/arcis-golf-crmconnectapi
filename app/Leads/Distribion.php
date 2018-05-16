@@ -16,20 +16,23 @@ class Distribion extends Base {
 
 		//\Log::info(print_r($data,1));
 
-		if(count($data) == 7) {
-			$data = array_merge(array_slice($data, 0, 4), [[]], array_slice($data, 4));
+		if(count($data) == 8) {
+			$data = array_merge(array_slice($data, 0, 5), [[]], array_slice($data, 5));
 			//\Log::info(print_r($data,1));
 		}
 
-		$out['sub_type']    = "member"; // For now, all leads coming from DISTRIBION are of the "member" variety....
-		$out['first_name']  = $data[0];
-		$out['last_name']   = $data[1];
-		$out['email']       = $data[2];
-		$out['phone']       = $data[3];
-		$out['interests']   = is_array($data[4]) ? implode(", ", (array_keys($data[4]))) : "";
-		$out['comments']    = $data[5];
-		$out['campaign']    = $data[6];
-		$out['source']      = strtolower(parse_url((preg_match("/^http/", $data[7]) ? "" : "http://") . $data[7], PHP_URL_HOST));
+		//\Log::info(print_r($data,1));
+
+		$out['sub_type']        = "member"; // For now, all leads coming from DISTRIBION are of the "member" variety....
+		$out['first_name']      = $data[0];
+		$out['last_name']       = $data[1];
+		$out['email']           = $data[2];
+		$out['phone']           = $data[3];
+		$out['preferred_date']  = $data[4]['dropdown_value'] == "NULL" ? "n/a" : $data[4]['dropdown_value'];
+		$out['interests']       = is_array($data[5]) ? implode(", ", (array_keys($data[5]))) : "";
+		$out['comments']        = $data[6];
+		$out['campaign']        = $data[7];
+		$out['source']          = strtolower(parse_url((preg_match("/^http/", $data[8]) ? "" : "http://") . $data[8], PHP_URL_HOST));
 
 		switch(true) {
 			case !$out['email']:

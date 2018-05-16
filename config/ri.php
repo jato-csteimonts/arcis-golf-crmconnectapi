@@ -79,6 +79,12 @@ return [
 						"site",
 					],
 				],
+				"clubLead.customData(0).tx06"  => [
+					"verbose"  => "Preferred Visit Date",
+					"possible" => [
+						"preferred_date",
+					],
+				],
 				"clubLead.customData(0).tx02"  => [
 					"verbose"  => "do not use - inactive custom field",
 					"possible" => [],
