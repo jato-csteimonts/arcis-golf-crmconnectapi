@@ -12,12 +12,17 @@ class Distribion extends Base {
 	public function normalize($data = []) {
 
 		$out    = [];
-		$data   = array_values($data['answer']);
+		$data   = array_values($data);
 
 		//\Log::info(print_r($data,1));
 
+		if(count($data) == 7) {
+			$data = array_merge(array_slice($data, 0, 4), ["",[]], array_slice($data, 4));
+			//\Log::info(print_r($data,1));
+		}
+
 		if(count($data) == 8) {
-			$data = array_merge(array_slice($data, 0, 5), [[]], array_slice($data, 5));
+			$data = array_merge(array_slice($data, 0, 4), [[]], array_slice($data, 4));
 			//\Log::info(print_r($data,1));
 		}
 
@@ -28,7 +33,7 @@ class Distribion extends Base {
 		$out['last_name']       = $data[1];
 		$out['email']           = $data[2];
 		$out['phone']           = $data[3];
-		$out['preferred_date']  = $data[4]['dropdown_value'] == "NULL" ? "n/a" : $data[4]['dropdown_value'];
+		$out['preferred_date']  = (!isset($data[4]['dropdown_value']) || $data[4]['dropdown_value'] == "NULL") ? "n/a" : $data[4]['dropdown_value'];
 		$out['interests']       = is_array($data[5]) ? implode(", ", (array_keys($data[5]))) : "";
 		$out['comments']        = $data[6];
 		$out['campaign']        = $data[7];
