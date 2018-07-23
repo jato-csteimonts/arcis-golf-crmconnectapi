@@ -8,6 +8,7 @@ class Base extends Model {
 
 	public static $TYPE_DISTRIBION = "distribion";
 	public static $TYPE_UNBOUNCE   = "unbounce";
+	public static $TYPE_BELOANDCO  = "beloandco";
 
 	protected $table = 'leads';
 

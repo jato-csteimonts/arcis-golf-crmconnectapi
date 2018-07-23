@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 $serviceProviders = [
 	"unbounce"   => "UnBounce",
 	"distribion" => "Distribion",
+	"beloandco"     => "BeloAndCo",
 ];
 
 foreach($serviceProviders as $type => $controller) {

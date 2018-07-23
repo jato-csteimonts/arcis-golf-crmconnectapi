@@ -307,11 +307,15 @@ return [
 				],
 				"lead.customData(0).tx03"  => [
 					"verbose"  => "Company / Title",
-					"possible" => [],
+					"possible" => [
+						"company_title"
+					],
 				],
 				"lead.customData(0).b00"   => [
 					"verbose"  => "Dates Flexible",
-					"possible" => [],
+					"possible" => [
+						"yes_no"
+					],
 				],
 				"lead.decisionDate"        => [
 					"verbose"  => "Decision Date",
@@ -338,7 +342,9 @@ return [
 				],
 				"lead.estimatedAttendance" => [
 					"verbose"  => "Estimated Attendance",
-					"possible" => [],
+					"possible" => [
+						"number"
+					],
 				],
 				"lead.eventDate"           => [
 					"verbose"  => "Event Date",
@@ -441,6 +447,7 @@ return [
 					"verbose"  => "Expected Number of Guests",
 					"possible" => [
 						"expected_number_of_guests",
+						"number",
 					],
 				],
 
