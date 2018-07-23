@@ -30,8 +30,14 @@ class UnBounce extends Base {
 			$Lead->source             = $data['source'];
 			$Lead->data               = serialize($data);
 
-			$Club          = \App\Club::where("site_code", $data['site'])->orWhere("name", "LIKE", "%{$data['site']}%")->firstOrFail();
-			$Lead->club_id = $Club->id;
+			// Get Club
+			try {
+				$Club          = \App\Club::where("site_code", $data['site'])->orWhere("name", "LIKE", "%{$data['site']}%")->firstOrFail();
+				$Lead->club_id = $Club->id;
+			} catch(\Exception $e) {
+				$Domain        = \App\Domain::where("domain", $Lead->source)->firstOrFail();
+				$Lead->club_id = $Domain->club_id;
+			}
 
 			// Get Sales Person
 			try {

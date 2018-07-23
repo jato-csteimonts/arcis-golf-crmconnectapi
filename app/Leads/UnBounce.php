@@ -22,15 +22,13 @@ class UnBounce extends Base {
 			}
 		}
 
-		$out['sub_type']        = $out['lead_type'];
-		$out['source']          = isset($out['page_url']) ? preg_replace("/^http([s]?):\/\//", "", $out['page_url']) : "";
+		$out['sub_type'] = $out['lead_type'];
+		$out['source']   = strtolower(parse_url((preg_match("/^http/", $out['page_url']) ? "" : "http://") . $out['page_url'], PHP_URL_HOST));
 
 		if(isset($out['club'])) {
 			$out['site'] = $out['club'];
 			unset($out['club']);
 		}
-
-		//$out['membership_type'] = isset($out['please_choose_a_membership_type']) ? $out['please_choose_a_membership_type'] : NULL;
 
 		//\Log::info(print_r($out,1));
 
