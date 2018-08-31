@@ -37,8 +37,16 @@ class ReserveInteractive extends Model {
 			}
 		}
 
+		$misc_ignore = [
+			"form",
+			"captcha",
+			"honeypot"
+		];
+
+		$regex = '/(' .implode('|', $misc_ignore) .')/i';
+
 		foreach($form_data as $k => $v) {
-			if(!in_array($k, $used)) {
+			if(!in_array($k, $used) && !preg_match($regex, $k)) {
 				$misc[] = ucwords(str_replace("_", " ", $k)) . " : {$v}";
 			}
 		}
