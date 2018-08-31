@@ -259,7 +259,10 @@ return [
 				],
 				"clubLead.contact.mailingAddress.zipCode"  => [
 					"verbose"  => "Primary Contact Mailing Address Zip Code",
-					"possible" => [],
+					"possible" => [
+						"zip",
+						"Zip",
+					],
 				],
 				"clubLead.contact.mobilePhone"             => [
 					"verbose"  => "Primary Contact Mobile Phone",
@@ -343,7 +346,7 @@ return [
 				"lead.estimatedAttendance" => [
 					"verbose"  => "Estimated Attendance",
 					"possible" => [
-						"number"
+						//"number"
 					],
 				],
 				"lead.eventDate"           => [
@@ -527,7 +530,10 @@ return [
 				],
 				"lead.contact.mailingAddress.zipCode"  => [
 					"verbose"  => "Primary Contact Mailing Address Zip Code",
-					"possible" => [],
+					"possible" => [
+						"zip",
+						"Zip",
+					],
 				],
 				"lead.contact.mobilePhone"             => [
 					"verbose"  => "Primary Contact Mobile Phone",

@@ -34,12 +34,12 @@ class BeloAndCo extends Base {
 			$Lead->club_id = $Domain->club_id;
 
 			// Get Sales Person
-			$SalespersonRole   = \App\UserRole::where("club_id",$Domain->club_id)->where("role", "salesperson")->firstOrFail();
+			$SalespersonRole   = \App\UserRole::where("club_id",$Domain->club_id)->where("role", "salesperson")->where("sub_role", $Lead->sub_type)->firstOrFail();
 			$Salesperson       = \App\User::findOrFail($SalespersonRole->user_id);
 			$Lead->salesperson = $Salesperson->id;
 
 			// Get Owner
-			$OwnerRole   = \App\UserRole::where("club_id", $Domain->club_id)->where("role", "owner")->firstOrFail();
+			$OwnerRole   = \App\UserRole::where("club_id", $Domain->club_id)->where("role", "owner")->where("sub_role", $Lead->sub_type)->firstOrFail();
 			$Owner       = \App\User::findOrFail($OwnerRole->user_id);
 			$Lead->owner = $Owner->id;
 

@@ -19,7 +19,7 @@ class Distribion extends Base {
 			$Lead = new \App\Leads\Distribion();
 			$data = $Lead->normalize($request->toArray());
 
-			//\Log::info(print_r($data,1));
+			\Log::info(print_r($data,1));
 
 			$Lead->webhook_request_id = $WebhookRequest->id;
 			$Lead->sub_type           = $data['sub_type'];

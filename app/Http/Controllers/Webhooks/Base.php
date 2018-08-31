@@ -27,7 +27,7 @@ class Base {
 		$Club = \App\Club::findOrFail($Lead->club_id);
 
 		$mergeData = [
-			"lead_type"   => $Lead->sub_type,
+			"lead_type"   => preg_match("/member/i", $Lead->sub_type) ? "member" : "event",
 			"site"        => $Club->name,
 			"division"    => ucwords(strtolower($Club->division)) . " Division",
 			"lead_name"   => ucwords(strtolower("{$Lead->first_name} {$Lead->last_name}")),
@@ -36,8 +36,12 @@ class Base {
 		];
 
 		//\Log::info(print_r($Lead->toArray(),1));
+		//\Log::info(print_r($mergeData,1));
+		//\Log::info("Normalizing........");
 
 		$json = \App\ReserveInteractive::normalize(array_merge(unserialize($Lead->data), $mergeData));
+
+		//\Log::info(print_r($json,1));
 
 		$ServiceProvider = new \App\ServiceProviders\ReserveInteractive();
 

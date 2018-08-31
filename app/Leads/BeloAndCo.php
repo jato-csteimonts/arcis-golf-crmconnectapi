@@ -13,9 +13,10 @@ class BeloAndCo extends Base {
 
 		$out = [];
 
-		//\Log::info(print_r($data,1));
-
+		$out['campaign_attribution'] = "Website Lead";
 		$out['sub_type'] = "member";
+
+		//\Log::info(print_r($data,1));
 
 		foreach ($data as $incoming_field_key => $incoming_field_value) {
 			$field = preg_replace(["/^field_member_/", "/_$/"], "", $incoming_field_key);
@@ -83,8 +84,41 @@ class BeloAndCo extends Base {
 		$out['source'] = preg_replace("/^www\./", "", strtolower(parse_url((preg_match("/^http/", $out['source']) ? "" : "http://") . $out['source'], PHP_URL_HOST)));
 
 		if(isset($out['event_type'])) {
-			$out['sub_type'] = "event";
+			switch(true) {
+				case preg_match("/wedding/i", $out['event_type']):
+					$out['sub_type'] = "wedding";
+					break;
+				case preg_match("/private/i", $out['event_type']):
+					$out['sub_type'] = "private";
+					break;
+				case preg_match("/tournament/i", $out['event_type']):
+					$out['sub_type'] = "tournament";
+					break;
+				case preg_match("/corporate/i", $out['event_type']):
+					$out['sub_type'] = "corporate";
+					break;
+				default:
+					$out['sub_type'] = "event";
+					break;
+			}
+		} elseif(isset($out['inquiry_type'])) {
+			switch(true) {
+				case preg_match("/wedding/i", $out['inquiry_type']):
+					$out['sub_type'] = "wedding";
+					break;
+				case preg_match("/private/i", $out['inquiry_type']):
+					$out['sub_type'] = "private";
+					break;
+				case preg_match("/member/i", $out['inquiry_type']):
+					$out['sub_type'] = "member";
+					break;
+				default:
+					$out['sub_type'] = "event";
+					break;
+			}
 		}
+
+		$out['email'] = trim(str_replace(" ", "", $out['email']));
 
 		switch(true) {
 			case !$out['email']:

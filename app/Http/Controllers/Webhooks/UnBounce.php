@@ -44,9 +44,10 @@ class UnBounce extends Base {
 				if(!$data['salesperson']) {
 					throw new \Exception();
 				}
+				throw new \Exception();
 				$Salesperson = \App\User::where("email", $data['salesperson'])->firstOrFail();
 			} catch(\Exception $e) {
-				$SalespersonRole   = \App\UserRole::where("club_id",$Club->id)->where("role", "salesperson")->firstOrFail();
+				$SalespersonRole   = \App\UserRole::where("club_id",$Club->id)->where("role", "salesperson")->where("sub_role", $Lead->sub_type)->firstOrFail();
 				$Salesperson       = \App\User::findOrFail($SalespersonRole->user_id);
 			}
 
@@ -57,6 +58,7 @@ class UnBounce extends Base {
 				if(!$data['owner']) {
 					throw new \Exception();
 				}
+				throw new \Exception();
 				$Owner = \App\User::where("email", $data['owner'])->firstOrFail();
 			} catch(\Exception $e) {
 				$OwnerRole   = \App\UserRole::where("club_id",$Club->id)->where("role", "owner")->firstOrFail();
