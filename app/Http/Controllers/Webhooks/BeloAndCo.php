@@ -22,12 +22,12 @@ class BeloAndCo extends Base {
 			//\Log::info(print_r($data,1));
 
 			$Lead->webhook_request_id = $WebhookRequest->id;
-			$Lead->sub_type           = $data['sub_type'];
-			$Lead->first_name         = $data['first_name'];
-			$Lead->last_name          = $data['last_name'];
-			$Lead->email              = $data['email'];
-			$Lead->phone              = $data['phone'];
-			$Lead->source             = $data['source'];
+			$Lead->sub_type           = $data['sub_type'] ?? "";
+			$Lead->first_name         = $data['first_name'] ?? "";
+			$Lead->last_name          = $data['last_name'] ?? "";
+			$Lead->email              = $data['email'] ?? "";
+			$Lead->phone              = $data['phone'] ?? "";
+			$Lead->source             = $data['source'] ?? "";
 
 			// Get Club
 			$Domain        = \App\Domain::where("domain", $Lead->source)->firstOrFail();

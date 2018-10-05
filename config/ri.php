@@ -127,7 +127,15 @@ return [
 				],
 				"clubLead.leadType"            => [
 					"verbose"  => "lead type",
-					"possible" => [],
+					"possible" => [
+						//"sub_type"
+					],
+				],
+				"clubLead.customData(0).tx07"  => [
+					"verbose"  => "Lead type",
+					"possible" => [
+						"sub_type",
+					],
 				],
 				"clubLead.customData(0).tx05"  => [
 					"verbose"  => "lead/membership description",
@@ -388,7 +396,9 @@ return [
 				],
 				"lead.leadType"            => [
 					"verbose"  => "Lead Type",
-					"possible" => [],
+					"possible" => [
+						//"sub_type"
+					],
 				],
 				"lead.locations"           => [
 					"verbose"  => "Location",
@@ -437,6 +447,12 @@ return [
 					"verbose"  => "Preferred Event Date",
 					"possible" => [
 						"preferred_event_date"
+					],
+				],
+				"lead.customData(1).tx00"  => [
+					"verbose"  => "Lead type",
+					"possible" => [
+						"sub_type",
 					],
 				],
 				"lead.customData(0).tx07"  => [
