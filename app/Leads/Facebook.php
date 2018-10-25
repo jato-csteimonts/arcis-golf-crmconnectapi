@@ -2,7 +2,7 @@
 
 namespace App\Leads;
 
-class BeloAndCo extends Base {
+class Facebook extends Base {
 
 	public function __construct() {
 		$this->setAttribute("type", self::$TYPE_BELOANDCO);
@@ -30,20 +30,20 @@ class BeloAndCo extends Base {
 					$times = [];
 					if($incoming_field_value['und'][0]['value']) {
 						$datetime = [];
-						if(isset($incoming_field_value['und'][0]['value']['date'])) {
+						if($incoming_field_value['und'][0]['value']['date']) {
 							$datetime[] = $incoming_field_value['und'][0]['value']['date'];
 						}
-						if(isset($incoming_field_value['und'][0]['value']['time'])) {
+						if($incoming_field_value['und'][0]['value']['time']) {
 							$datetime[] = $incoming_field_value['und'][0]['value']['time'];
 						}
 						$times[] = implode(" at ", $datetime);
 					}
 					if($incoming_field_value['und'][0]['value2']) {
 						$datetime = [];
-						if(isset($incoming_field_value['und'][0]['value2']['date'])) {
+						if($incoming_field_value['und'][0]['value2']['date']) {
 							$datetime[] = $incoming_field_value['und'][0]['value2']['date'];
 						}
-						if(isset($incoming_field_value['und'][0]['value2']['time'])) {
+						if($incoming_field_value['und'][0]['value2']['time']) {
 							$datetime[] = $incoming_field_value['und'][0]['value2']['time'];
 						}
 						$times[] = implode(" at ", $datetime);
@@ -91,7 +91,6 @@ class BeloAndCo extends Base {
 				case preg_match("/private/i", $out['event_type']):
 					$out['sub_type'] = "private";
 					break;
-				case preg_match("/outing/i", $out['event_type']):
 				case preg_match("/tournament/i", $out['event_type']):
 					$out['sub_type'] = "tournament";
 					break;
@@ -119,7 +118,7 @@ class BeloAndCo extends Base {
 			}
 		}
 
-		$out['email'] = trim(str_replace(" ", "", $out['email'] ?? null));
+		$out['email'] = trim(str_replace(" ", "", $out['email']));
 
 		switch(true) {
 			case !$out['email']:

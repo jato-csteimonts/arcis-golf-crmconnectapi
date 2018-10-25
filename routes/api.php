@@ -16,8 +16,9 @@ $serviceProviders = [
 	"unbounce"   => "UnBounce",
 	"distribion" => "Distribion",
 	"beloandco"     => "BeloAndCo",
+	"facebook"     => "Facebook",
 ];
 
 foreach($serviceProviders as $type => $controller) {
-	Route::post($type, "Webhooks\\{$controller}@process");
+	Route::any($type, "Webhooks\\{$controller}@process");
 }

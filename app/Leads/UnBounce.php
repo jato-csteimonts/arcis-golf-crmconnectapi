@@ -23,8 +23,20 @@ class UnBounce extends Base {
 		}
 
 		$out['page_url'] = isset($out['page_url']) ? $out['page_url'] : $data['page_url'];
-		$out['sub_type'] = $out['lead_type'];
+		$out['sub_type'] = $out['lead_type'] ?? null;
 		$out['source']   = preg_replace("/^www\./", "", strtolower(parse_url((preg_match("/^http/", $out['page_url']) ? "" : "http://") . $out['page_url'], PHP_URL_HOST)));
+
+		if(is_null($out['sub_type'])) {
+			$host = parse_url($out['page_url'], PHP_URL_HOST);
+			switch(true) {
+				case preg_match("/^join\./", $host):
+					$out['sub_type'] = "member";
+					break;
+				case preg_match("/^join\./", $host):
+					$out['sub_type'] = "member";
+					break;
+			}
+		}
 
 		if(isset($out['club'])) {
 			$out['site'] = $out['club'];
