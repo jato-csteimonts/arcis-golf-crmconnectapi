@@ -5,120 +5,23 @@ namespace App\Leads;
 class Facebook extends Base {
 
 	public function __construct() {
-		$this->setAttribute("type", self::$TYPE_BELOANDCO);
+		$this->setAttribute("type", self::$TYPE_FACEBOOK);
 		parent::__construct();
 	}
 
 	public function normalize($data = []) {
 
-		$out = [];
+		$data = isset($data[0]) ? $data[0] : $data;
 
-		$out['campaign_attribution'] = "Website Lead";
-		$out['sub_type'] = "member";
-
-		//\Log::info(print_r($data,1));
-
-		foreach ($data as $incoming_field_key => $incoming_field_value) {
-			$field = preg_replace(["/^field_member_/", "/_$/"], "", $incoming_field_key);
-			$field = preg_replace(["/^field_/", "/_$/"], "", $field);
-			//\Log::info("Field: {$field}");
-			switch(true) {
-				case !is_array($incoming_field_value):
-					$value = $incoming_field_value;
-					break;
-				case $field == "proposed_dates_of_event":
-					$times = [];
-					if($incoming_field_value['und'][0]['value']) {
-						$datetime = [];
-						if($incoming_field_value['und'][0]['value']['date']) {
-							$datetime[] = $incoming_field_value['und'][0]['value']['date'];
-						}
-						if($incoming_field_value['und'][0]['value']['time']) {
-							$datetime[] = $incoming_field_value['und'][0]['value']['time'];
-						}
-						$times[] = implode(" at ", $datetime);
-					}
-					if($incoming_field_value['und'][0]['value2']) {
-						$datetime = [];
-						if($incoming_field_value['und'][0]['value2']['date']) {
-							$datetime[] = $incoming_field_value['und'][0]['value2']['date'];
-						}
-						if($incoming_field_value['und'][0]['value2']['time']) {
-							$datetime[] = $incoming_field_value['und'][0]['value2']['time'];
-						}
-						$times[] = implode(" at ", $datetime);
-					}
-					$value = implode(" to ", $times);
-					break;
-				case $field == "contact_address":
-					$value = null;
-					$out["Address 1"] = $incoming_field_value['und'][0]['street'];
-					$out["Address 2"] = $incoming_field_value['und'][0]['additional'];
-					$out["City"] = $incoming_field_value['und'][0]['city'];
-					$out["State"] = $incoming_field_value['und'][0]['province'];
-					$out["Zip"] = $incoming_field_value['und'][0]['postal_code'];
-					continue;
-					break;
-				case is_array($incoming_field_value['und']):
-					$tmp_data  = $incoming_field_value['und'][0];
-					$keys = array_keys($tmp_data);
-					$value = $tmp_data[$keys[0]];
-					break;
-				default:
-					$value = $incoming_field_value['und'];
-					break;
-			}
-
-			switch(true) {
-				case strstr($field, "phone") && !isset($out['phone']):
-					$field = "phone";
-					break;
-				default: break;
-			}
-
-			if($value) {
-				$out[$field] = $value;
-			}
-		}
-
-		$out['source'] = preg_replace("/^www\./", "", strtolower(parse_url((preg_match("/^http/", $out['source']) ? "" : "http://") . $out['source'], PHP_URL_HOST)));
-
-		if(isset($out['event_type'])) {
-			switch(true) {
-				case preg_match("/wedding/i", $out['event_type']):
-					$out['sub_type'] = "wedding";
-					break;
-				case preg_match("/private/i", $out['event_type']):
-					$out['sub_type'] = "private";
-					break;
-				case preg_match("/tournament/i", $out['event_type']):
-					$out['sub_type'] = "tournament";
-					break;
-				case preg_match("/corporate/i", $out['event_type']):
-					$out['sub_type'] = "corporate";
-					break;
-				default:
-					$out['sub_type'] = "event";
-					break;
-			}
-		} elseif(isset($out['inquiry_type'])) {
-			switch(true) {
-				case preg_match("/wedding/i", $out['inquiry_type']):
-					$out['sub_type'] = "wedding";
-					break;
-				case preg_match("/private/i", $out['inquiry_type']):
-					$out['sub_type'] = "private";
-					break;
-				case preg_match("/member/i", $out['inquiry_type']):
-					$out['sub_type'] = "member";
-					break;
-				default:
-					$out['sub_type'] = "event";
-					break;
-			}
-		}
-
-		$out['email'] = trim(str_replace(" ", "", $out['email']));
+		$name_info                   = explode(" ", $data['full_name'], 2);
+		$out                         = [];
+		$out['campaign_attribution'] = $data['campaign_name'];
+		$out['sub_type']             = "event";
+		$out['source']               = "Facebook Lead Ad: " . $data['campaign_name'];
+		$out['email']                = $data['email'];
+		$out['first_name']           = $name_info[0];
+		$out['last_name']            = $name_info[1] ?? "No Last Name Provided";
+		$out['phone']                = preg_replace("/([^0-9]+)/", "", $data['phone_number']);
 
 		switch(true) {
 			case !$out['email']:
@@ -132,7 +35,7 @@ class Facebook extends Base {
 				break;
 		}
 
-		\Log::info(print_r($out,1));
+		//\Log::info(print_r($out,1));
 
 		return $out;
 

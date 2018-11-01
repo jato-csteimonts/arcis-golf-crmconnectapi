@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Webhooks;
 use App\Domain;
 use App\Field;
 use App\Webforms;
+use App\Mail\Lead;
 
 use Illuminate\Http\Request;
 
@@ -72,9 +73,21 @@ class UnBounce extends Base {
 			//\Log::info(print_r($Lead->toArray(),1));
 			$Lead->save();
 
-			$this->pushToCRM($Lead);
+			if(isset($data['test']) && $data['test'] == 1) {
+				//$when = \Carbon\Carbon::now()->addMinutes(1);
+				\Mail::to([
+					"chris.steimonts@gmail.com"
+				])->send(new Lead($Owner, $Club, $Lead));
+			} else {
+				$this->pushToCRM($Lead);
 
-			//abort(500, json_encode(["errors" => "Testing new UnBounce webhooks"]));
+				\Mail::to([
+					$Owner->email
+				])->bcc([
+					"pdamer@arcisgolf.com",
+					"chris.steimonts@gmail.com"
+				])->send(new Lead($Owner, $Club, $Lead));
+			}
 
 		} catch (\Exception $e) {
 

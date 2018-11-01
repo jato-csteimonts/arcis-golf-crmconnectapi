@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Webhooks;
 use App\Domain;
 use App\Field;
 use App\Webforms;
+use App\Mail\Lead;
 
 use Illuminate\Http\Request;
 
@@ -49,6 +50,15 @@ class Distribion extends Base {
 			$Lead->save();
 
 			$this->pushToCRM($Lead);
+
+			$Club = \App\Club::find($Lead->club_id);
+
+			\Mail::to([
+				$Owner->email
+			])->bcc([
+				"pdamer@arcisgolf.com",
+				"chris.steimonts@gmail.com"
+			])->send(new Lead($Owner, $Club, $Lead));
 
 		} catch (\Exception $e) {
 
