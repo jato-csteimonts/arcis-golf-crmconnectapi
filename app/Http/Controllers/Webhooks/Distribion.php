@@ -57,7 +57,9 @@ class Distribion extends Base {
 				$Owner->email
 			])->bcc([
 				"pdamer@arcisgolf.com",
-				"chris.steimonts@gmail.com"
+				"chris.steimonts@gmail.com",
+				//"rrinella@arcisgolf.com",
+				//"Ccrocker@arcisgolf.com",
 			])->send(new Lead($Owner, $Club, $Lead));
 
 		} catch (\Exception $e) {

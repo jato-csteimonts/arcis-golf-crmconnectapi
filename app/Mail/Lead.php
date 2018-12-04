@@ -34,8 +34,8 @@ class Lead extends Mailable
      */
     public function build()
     {
-        return $this->subject(ucwords($this->lead->sub_type) . " lead for {$this->club->name}")
-                    ->from('no-reply@arcisgolf.com', $this->club->name)
+        return $this->subject(ucwords($this->lead->sub_type) . " lead for " . ($this->club->name ? $this->club->name : $this->lead->source))
+                    ->from('no-reply@arcisgolf.com', ($this->club->name ? $this->club->name : $this->lead->source))
                     ->view('emails.lead');
     }
 }

@@ -24,16 +24,26 @@ class Base {
 
 	public function pushToCRM(\App\Leads\Base $Lead) {
 
-		$Club = \App\Club::findOrFail($Lead->club_id);
-
 		$mergeData = [
 			"lead_type"   => preg_match("/member/i", $Lead->sub_type) ? "member" : "event",
-			"site"        => $Club->name,
-			"division"    => ucwords(strtolower($Club->division)) . " Division",
 			"lead_name"   => ucwords(strtolower("{$Lead->first_name} {$Lead->last_name}")),
 			"owner"       => \App\User::findOrFail($Lead->owner)->email,
 			"salesperson" => \App\User::findOrFail($Lead->salesperson)->email,
 		];
+
+		if(!is_null($Lead->club_id)) {
+			$Club      = \App\Club::findOrFail($Lead->club_id);
+			$mergeData = array_merge($mergeData, [
+				"site"     => $Club->name,
+				"division" => ucwords(strtolower($Club->division)) . " Division",
+			]);
+		} else {
+			$mergeData = array_merge($mergeData, [
+				//"site"     => "",
+				"division" => ucwords(strtolower($Lead->division)) . " Division",
+				//"limitContactsToSite" => false,
+			]);
+		}
 
 		//\Log::info(print_r($Lead->toArray(),1));
 		//\Log::info(print_r($mergeData,1));
@@ -42,6 +52,7 @@ class Base {
 		$json = \App\ReserveInteractive::normalize(array_merge(unserialize($Lead->data), $mergeData));
 
 		//\Log::info(print_r($json,1));
+		//throw new Exception();
 
 		$ServiceProvider = new \App\ServiceProviders\ReserveInteractive();
 
