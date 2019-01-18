@@ -45,6 +45,12 @@ class ReserveInteractive extends Model {
 
 		$regex = '/(' .implode('|', $misc_ignore) .')/i';
 
+		/*
+		\Log::info("***** STEIN *****");
+		\Log::info(print_r($form_data,1));
+		\Log::info("***** STEIN *****");
+		*/
+
 		foreach($form_data as $k => $v) {
 			if(!in_array($k, $used) && !preg_match($regex, $k)) {
 				$misc[] = ucwords(str_replace("_", " ", $k)) . " : {$v}";

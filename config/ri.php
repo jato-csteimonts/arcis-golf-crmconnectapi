@@ -68,8 +68,33 @@ return [
 				"clubLead.customData(0).tx01"  => [
 					"verbose"  => "campaign attribution",
 					"possible" => [
-						"campaign_attribution",
+						//"campaign_attribution",
 						"campaign",
+						"utm_source",
+					],
+				],
+				"clubLead.customData(0).tx08"  => [
+					"verbose"  => "campaign medium",
+					"possible" => [
+						"utm_medium",
+					],
+				],
+				"clubLead.customData(1).tx01"  => [
+					"verbose"  => "campaign content",
+					"possible" => [
+						"utm_content",
+					],
+				],
+				"clubLead.customData(1).tx00"  => [
+					"verbose"  => "campaign term",
+					"possible" => [
+						"utm_term",
+					],
+				],
+				"clubLead.customData(0).tx09"  => [
+					"verbose"  => "campaign name",
+					"possible" => [
+						"utm_campaign",
 					],
 				],
 				"clubLead.club"                => [
@@ -460,6 +485,31 @@ return [
 					"possible" => [
 						"campaign_attribution",
 						"campaign",
+						"utm_source",
+					],
+				],
+				"lead.customData(1).tx01"  => [
+					"verbose"  => "campaign medium",
+					"possible" => [
+						"utm_medium",
+					],
+				],
+				"lead.customData(1).tx04"  => [
+					"verbose"  => "campaign content",
+					"possible" => [
+						"utm_content",
+					],
+				],
+				"lead.customData(1).tx03"  => [
+					"verbose"  => "campaign term",
+					"possible" => [
+						"utm_term",
+					],
+				],
+				"lead.customData(1).tx02"  => [
+					"verbose"  => "campaign name",
+					"possible" => [
+						"utm_campaign",
 					],
 				],
 				"lead.customData(0).tx08"   => [
@@ -469,7 +519,6 @@ return [
 						"number",
 					],
 				],
-
 			],
 			"owner"           => [
 				"lead.owner.emailAddress" => [

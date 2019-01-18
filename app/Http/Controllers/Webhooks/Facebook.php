@@ -47,17 +47,17 @@ class Facebook extends Base {
 			$Lead->source             = $data['source'] ?? "";
 
 			switch(true) {
-				case strstr($data['campaign_attribution'], "DFW Area"):
+				case strstr($data['campaign_attribution'], "DFW"):
 
 					$Club           = new \App\Club();
 					$Club->division = "private";
 					$Lead->club_id  = null;
 
 					// Get Sales Person
-					$Salesperson       = \App\User::findOrFail(383); // Ty Watson
+					$Salesperson       = \App\User::findOrFail(254); // Kiley Weaver
 					$Lead->salesperson = $Salesperson->id;
 					// Get Owner
-					$Owner       = \App\User::findOrFail(383); // Ty Watson
+					$Owner       = \App\User::findOrFail(254); // Kiley Weaver
 					$Lead->owner = $Owner->id;
 
 					//\Log::info(print_r($Lead->toArray(),1));
@@ -142,6 +142,7 @@ class Facebook extends Base {
 					$mail_to[]  = $Owner->email;
 					$mail_bcc[] = "rrinella@arcisgolf.com";
 					$mail_bcc[] = "Ccrocker@arcisgolf.com";
+					$mail_bcc[] = "jraffelson@arcisgolf.com";
 
 					break;
 				case strstr($data['campaign_attribution'], "Phoenix Area"):

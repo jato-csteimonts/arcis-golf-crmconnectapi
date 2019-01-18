@@ -22,6 +22,8 @@ class Facebook extends Base {
 		$out['first_name']           = $name_info[0];
 		$out['last_name']            = $name_info[1] ?? "No Last Name Provided";
 		$out['phone']                = preg_replace("/([^0-9]+)/", "", $data['phone_number']);
+		$out['last_name']            = $name_info[1] ?? "No Last Name Provided";
+		$out['company_title']        = $data['company_name'];
 
 		switch(true) {
 			case !$out['email']:
