@@ -145,6 +145,7 @@ class Facebook extends Base {
 					$mail_bcc[] = "jraffelson@arcisgolf.com";
 
 					break;
+				case strstr($data['campaign_attribution'], "PHX"):
 				case strstr($data['campaign_attribution'], "Phoenix Area"):
 
 					$Club           = new \App\Club();
