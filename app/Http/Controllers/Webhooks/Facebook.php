@@ -54,10 +54,10 @@ class Facebook extends Base {
 					$Lead->club_id  = null;
 
 					// Get Sales Person
-					$Salesperson       = \App\User::findOrFail(254); // Kiley Weaver
+					$Salesperson       = \App\User::findOrFail(267); // Megan Calmes
 					$Lead->salesperson = $Salesperson->id;
 					// Get Owner
-					$Owner       = \App\User::findOrFail(254); // Kiley Weaver
+					$Owner       = \App\User::findOrFail(267); // Megan Calmes
 					$Lead->owner = $Owner->id;
 
 					//\Log::info(print_r($Lead->toArray(),1));
@@ -142,7 +142,6 @@ class Facebook extends Base {
 					$mail_to[]  = $Owner->email;
 					$mail_bcc[] = "rrinella@arcisgolf.com";
 					$mail_bcc[] = "Ccrocker@arcisgolf.com";
-					$mail_bcc[] = "jraffelson@arcisgolf.com";
 
 					break;
 				case strstr($data['campaign_attribution'], "PHX"):
