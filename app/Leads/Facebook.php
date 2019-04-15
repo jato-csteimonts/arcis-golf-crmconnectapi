@@ -13,10 +13,21 @@ class Facebook extends Base {
 
 		$data = isset($data[0]) ? $data[0] : $data;
 
+		$sub_types = [
+			'member',
+			'event',
+			'corporate',
+			'tournament',
+			'wedding',
+			'private'
+		];
+
+		$tmp_data = explode("_", $data['campaign_attribution'], 2);
+
 		$name_info                   = explode(" ", $data['full_name'], 2);
 		$out                         = [];
 		$out['campaign_attribution'] = $data['campaign_name'];
-		$out['sub_type']             = "event";
+		$out['sub_type']             = in_array(strtolower($tmp_data[2]), $sub_types) ? strtolower($tmp_data[2]) : "event";
 		$out['source']               = "Facebook Lead Ad: " . $data['campaign_name'];
 		$out['email']                = $data['email'];
 		$out['first_name']           = $name_info[0];

@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\User;
+use App\UserClub;
+use App\UserRole;
 
 class UserController extends Controller
 {
@@ -29,11 +31,11 @@ class UserController extends Controller
      */
     public function create()
     {
-        $user = new User();
+	    $user = new User();
 
-        return view('web.users.form', [
-            'user' => $user
-        ]);
+	    return view('web.users.edit', [
+		    'user' => $user
+	    ]);
     }
 
     /**
@@ -44,13 +46,18 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $user = new User();
-        $user->name = $request->get('name');
-        $user->email = $request->get('email');
-        $user->password = bcrypt(md5(date('YmdHis') . rand(0,10000) . rand(0, 10000)));
-        $user->save();
+	    $user = new \App\User();
+	    $user->name = $request->name;
+	    $user->email = $request->email;
+	    $user->is_admin = $request->is_admin ?? 0;
 
-        return redirect('/admin/users');
+	    if($request->password) {
+		    $user->password = \Hash::make($request->password);
+	    }
+
+	    $user->save();
+
+	    return $this->update($request, $user->id);
     }
 
     /**
@@ -72,11 +79,15 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $user = User::find($id);
+	    try {
+		    $user = \App\User::findOrFail($id);
+	    } catch (\Exception $e) {
+		    return redirect("/admin/users");
+	    }
 
-        return view('web.users.form', [
-            'user' => $user
-        ]);
+	    return view('web.users.edit', [
+		    'user' => $user
+	    ]);
     }
 
     /**
@@ -88,12 +99,92 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $user = User::find($id);
-        $user->name = $request->get('name');
-        $user->email = $request->get('email');
-        $user->save();
+	    try {
+		    $user = \App\User::findOrFail($id);
 
-        return redirect('/admin/users');
+		    $input = [
+			    "name" => $request->name,
+			    "email" => $request->email,
+			    "is_admin" => $request->is_admin ?? 0,
+		    ];
+
+		    if($request->password) {
+			    $input["password"] = \Hash::make($request->password);
+		    }
+
+		    $user->update($input);
+
+		    \Log::info(print_r($request->toArray(),1));
+
+		    ////////////////////////////////////////////////////////////////////////
+		    // Delete any Club assignments to this user that may have been removed
+		    //
+		    UserClub::where("user_id", $user->id)
+		            ->whereNotIn("club_id", $request->{"clubs-selected"} ?? [])
+		            ->delete();
+
+		    ///////////////////////////////////////////
+		    // Add any newly added users to the club
+		    //
+		    foreach($request->{"clubs-selected"} ?? [] AS $club_id) {
+			    try {
+				    UserClub::where("club_id", $club_id)
+				            ->where("user_id", $user->id)
+				            ->firstOrFail();
+			    } catch (\Exception $e) {
+				    $UserClub = new UserClub();
+				    $UserClub->club_id = $club_id;
+				    $UserClub->user_id = $user->id;
+				    $UserClub->save();
+			    }
+		    }
+
+		    //////////////////////////
+		    // Go through User Roles
+		    //
+		    foreach($request->roles ?? [] as $club_id => $roles) {
+			    $request->session()->flash('roles_club_id', $club_id);
+			    foreach($roles as $sub_role => $user_id) {
+
+				    UserRole::where("club_id", $club_id)
+				            ->where("sub_role", $sub_role)
+				            ->delete();
+
+				    if($user_id) {
+
+					    $UserRole = new UserRole();
+					    $UserRole->club_id = $club_id;
+					    $UserRole->user_id = $user_id;
+					    $UserRole->role = "owner";
+					    $UserRole->sub_role = $sub_role;
+					    $UserRole->save();
+
+					    $UserRole = new UserRole();
+					    $UserRole->club_id = $club_id;
+					    $UserRole->user_id = $user_id;
+					    $UserRole->role = "salesperson";
+					    $UserRole->sub_role = $sub_role;
+					    $UserRole->save();
+
+				    }
+
+			    }
+		    }
+
+
+
+	    } catch (\Exception $e) {
+		    \Log::info("****************************************");
+		    \Log::info("ERROR LOCATION: UserController::update()");
+		    \Log::info("ERROR MESSAGE: " . $e->getMessage());
+		    \Log::info("ERROR FILE: " . $e->getFile());
+		    \Log::info("ERROR LINE: " . $e->getLine());
+		    \Log::info("****************************************");
+		    return redirect("/admin/users");
+	    }
+
+	    return redirect("/admin/users/{$id}/edit");
+
     }
 
     /**
@@ -104,8 +195,36 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        $user = User::find($id);
-        $user->delete();
-        return redirect('/admin/users');
+	    try {
+
+		    $user = \App\User::findOrtFail($id);
+
+		    ////////////////////////////////////
+		    // Delete User / Club assignments
+		    //
+		    UserClub::where("user_id", $user->id)
+		            ->delete();
+
+		    //////////////////////
+		    // Delete User Roles
+		    //
+		    UserRole::where("user_id", $user->id)
+		            ->delete();
+
+		    ////////////////
+		    // Delete Club
+		    //
+		    $user->delete();
+
+	    } catch (\Exception $e) {
+		    \Log::info("****************************************");
+		    \Log::info("ERROR LOCATION: UserController::destroy()");
+		    \Log::info("ERROR MESSAGE: " . $e->getMessage());
+		    \Log::info("ERROR FILE: " . $e->getFile());
+		    \Log::info("ERROR LINE: " . $e->getLine());
+		    \Log::info("****************************************");
+	    }
+
+	    return redirect("/admin/users/");
     }
 }

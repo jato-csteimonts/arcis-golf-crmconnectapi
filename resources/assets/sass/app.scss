@@ -7,3 +7,25 @@
 
 // Bootstrap
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+
+.panel-body h3 {
+  padding-bottom: 10px;
+  margin: 0px 15% 20px 15%;
+  border-bottom: 1px solid #5e5e5e;
+}
+
+div.users select {
+  height:250px;
+}
+
+div.users.selected select option,
+div.users.all select option{
+  padding:2px 3px;
+  font-size:12px;
+  font-weight: bold;
+}
+
+div.users.selected select option span,
+div.users.all select option span {
+  font-weight: lighter;
+}

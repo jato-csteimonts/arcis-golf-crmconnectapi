@@ -41,7 +41,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('/admin/domains', 'Admin\DomainController');
     Route::resource('/admin/fields', 'Admin\FieldController');
 	Route::resource('/admin/clubs', 'Admin\ClubController');
-
+	Route::get('/admin/ajax', 'Controller@ajax');
 });
 
 Route::get('/webform-javascript', 'WebformController@serve_js');

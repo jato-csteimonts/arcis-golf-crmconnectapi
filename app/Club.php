@@ -6,6 +6,23 @@ use Illuminate\Database\Eloquent\Model;
 
 class Club extends Model
 {
+	protected $guarded = [];
+
+	public function domains()
+	{
+		return $this->hasMany('App\Domain');
+	}
+
+	public function users()
+	{
+		return $this->belongsToMany('App\User', 'user_clubs', 'club_id')->orderBy("users.name", "ASC");
+	}
+
+	public function user_roles()
+	{
+		return $this->hasMany('App\UserRole', "club_id")->where("role", "owner");
+	}
+
     public function digitalLeads()
     {
         return $this->hasMany('App\Digitallead');

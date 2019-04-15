@@ -14,9 +14,7 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $fillable = [
-        'name', 'email', 'password',
-    ];
+	protected $guarded = [];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -31,4 +29,9 @@ class User extends Authenticatable
     {
         return 'https://hooks.slack.com/services/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';
     }
+
+	public function clubs()
+	{
+		return $this->belongsToMany('App\Club', 'user_clubs', 'user_id')->orderBy("clubs.name", "ASC");
+	}
 }

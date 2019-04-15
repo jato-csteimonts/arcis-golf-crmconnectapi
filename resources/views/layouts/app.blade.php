@@ -16,12 +16,19 @@
 
 
     <!-- Scripts -->
+    <?php /**
     <script>
         window.Laravel = {!! json_encode([
             'csrfToken' => csrf_token(),
         ]) !!};
     </script>
-
+**/ ?>
+    <script
+            src="https://code.jquery.com/jquery-2.2.4.min.js"
+            integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/TypeWatch/3.0.1/jquery.typewatch.min.js"></script>
+    <script src="{{ asset('js/vendor/multiselect.min.js') }}"></script>
 </head>
 <body>
     <div id="app">
@@ -62,13 +69,13 @@
 
                                 <ul class="dropdown-menu" role="menu">
                                     <li>
-                                        <a href="/admin/users">Users</a>
+                                        <a href="{{url("/admin/clubs")}}">Clubs</a>
                                     </li>
-
                                     <li>
-                                        <a href="/admin/clubs">Clubs</a>
+                                        <a href="{{url("/admin/users")}}">Users</a>
                                     </li>
 
+                                    <?php /**
                                     <li>
                                         <a href="/admin/domains">Domains</a>
                                     </li>
@@ -83,7 +90,7 @@
                                     </li>
                                     <li>
                                         <a href="/admin/reserveinteractives">RI Log</a>
-                                    </li>
+                                    </li> **/ ?>
                                     <li>
                                         <a href="{{ route('logout') }}"
                                             onclick="event.preventDefault();
@@ -107,14 +114,9 @@
     </div>
 
     <!-- Scripts -->
-    <script
-            src="https://code.jquery.com/jquery-2.2.4.min.js"
-            integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
-            crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.13/js/dataTables.bootstrap.min.js"></script>
     <script src="https://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script>
-
     <script>
         $(document).ready(function() {
             $(".datatable").DataTable();
