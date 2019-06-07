@@ -13,10 +13,11 @@ use Illuminate\Http\Request;
 |
 */
 $serviceProviders = [
-	"unbounce"   => "UnBounce",
-	"distribion" => "Distribion",
+	"unbounce"      => "UnBounce",
+	"distribion"    => "Distribion",
 	"beloandco"     => "BeloAndCo",
-	"facebook"     => "Facebook",
+	"facebook"      => "Facebook",
+	"clubessential" => "ClubEssential",
 ];
 
 foreach($serviceProviders as $type => $controller) {

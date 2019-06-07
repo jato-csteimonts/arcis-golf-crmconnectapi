@@ -48,6 +48,7 @@ class Distribion extends Base {
 
 			//\Log::info(print_r($Lead->toArray(),1));
 			$Lead->save();
+			$Lead->refresh();
 
 			$this->pushToCRM($Lead);
 

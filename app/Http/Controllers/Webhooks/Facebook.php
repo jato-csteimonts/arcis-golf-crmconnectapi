@@ -266,6 +266,8 @@ class Facebook extends Base {
 
 			$Lead->data = serialize($data);
 			$Lead->save();
+			$Lead->refresh();
+
 			//\Log::info(print_r($Lead->toArray(),1));
 
 			if(is_null($Lead->club_id)) {

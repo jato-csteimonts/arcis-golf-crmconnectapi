@@ -72,6 +72,7 @@ class UnBounce extends Base {
 
 			//\Log::info(print_r($Lead->toArray(),1));
 			$Lead->save();
+			$Lead->refresh();
 
 			if(isset($data['test']) && $data['test'] == 1) {
 				//$when = \Carbon\Carbon::now()->addMinutes(1);

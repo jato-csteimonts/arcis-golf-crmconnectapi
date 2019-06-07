@@ -7,10 +7,11 @@ use Event;
 
 class Base extends Model {
 
-	public static $TYPE_DISTRIBION = "distribion";
-	public static $TYPE_UNBOUNCE   = "unbounce";
-	public static $TYPE_BELOANDCO  = "beloandco";
-	public static $TYPE_FACEBOOK   = "facebook";
+	public static $TYPE_DISTRIBION    = "distribion";
+	public static $TYPE_UNBOUNCE      = "unbounce";
+	public static $TYPE_BELOANDCO     = "beloandco";
+	public static $TYPE_FACEBOOK      = "facebook";
+	public static $TYPE_CLUBESSENTIAL = "clubessential";
 
 	protected $table = 'leads';
 
