@@ -48,6 +48,8 @@ $data[] = [
 **/
 
 $data[] = [
+	"Site_Code",
+	"Ri_Lead_Id",
 	"created_date",
 	"attribution_code",
 	"site",
@@ -105,6 +107,8 @@ foreach(["tap_clicks_event_leads", "tap_clicks_member_leads"] as $request) {
 				}
 
 				$data[] = [
+					$record[2],
+					$record[0],
 					strftime("%m/%d/%Y", strtotime($record[4])),
 					$record[6],
 					"{$record[2]} ({$record[3]})",
