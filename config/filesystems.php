@@ -63,6 +63,19 @@ return [
             'bucket' => env('AWS_BUCKET'),
         ],
 
+        'ftp' => [
+	        'driver'   => 'ftp',
+	        'host'     => 'ftp.tapclicks.com',
+	        'username' => 'ftp_arcis_sc',
+	        'password' => '1Ssib8XO9U',
+	        // Optional FTP Settings...
+	        // 'port'     => 21,
+	        // 'root'     => '',
+	        // 'passive'  => true,
+	        // 'ssl'      => true,
+	        // 'timeout'  => 30,
+        ],
+
     ],
 
 ];

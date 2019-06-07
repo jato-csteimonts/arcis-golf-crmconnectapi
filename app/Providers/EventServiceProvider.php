@@ -25,6 +25,9 @@ class EventServiceProvider extends ServiceProvider
 		    'App\Listeners\LogSentMessage',
 	    ],
     	*/
+	    'eloquent.created' => [
+		    'App\Events\EloquentCreated@eloquentCreated',
+	    ],
     ];
 
     /**
@@ -35,7 +38,5 @@ class EventServiceProvider extends ServiceProvider
     public function boot()
     {
         parent::boot();
-
-        //
     }
 }

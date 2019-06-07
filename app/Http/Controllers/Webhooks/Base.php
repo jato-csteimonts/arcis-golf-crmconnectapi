@@ -24,6 +24,19 @@ class Base {
 
 	public function pushToCRM(\App\Leads\Base $Lead) {
 
+		if($Lead->duplicate_of) {
+			$messageClass            = new class {};
+			$messageClass->status    = "ERROR";
+			$messageClass->messages  = "Duplicate Lead Detected, not sending to ReserveInteractive";
+			$messageClass->lead      = $Lead->toArray();
+			throw new \Exception(json_encode($messageClass));
+		}
+
+		if($Lead->email == "Wetz82@aol.com") {
+			\Log::info("STEIN TEST...");
+			exit;
+		}
+
 		$mergeData = [
 			"lead_type"   => preg_match("/member/i", $Lead->sub_type) ? "member" : "event",
 			"lead_name"   => ucwords(strtolower("{$Lead->first_name} {$Lead->last_name}")),

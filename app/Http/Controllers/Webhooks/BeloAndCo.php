@@ -47,7 +47,9 @@ class BeloAndCo extends Base {
 			$Lead->data = serialize($data);
 
 			\Log::info(print_r($Lead->toArray(),1));
+
 			$Lead->save();
+			$Lead->refresh();
 
 			$this->pushToCRM($Lead);
 
