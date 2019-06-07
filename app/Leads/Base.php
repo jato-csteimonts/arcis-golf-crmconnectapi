@@ -14,7 +14,9 @@ class Base extends Model {
 
 	protected $table = 'leads';
 
-	public function __construct() {}
+	public function __construct() {
+		parent::__construct();
+	}
 
 	public function normalize($data = []) {
 		throw new \Exception("normalize() function should be implemented in child class (Class: {$this->type})");

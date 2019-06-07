@@ -13,44 +13,36 @@ use Illuminate\Database\Eloquent\Model;
 
 class EloquentCreated
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+	use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /**
-     * Create a new event instance.
-     *
-     * @return void
-     */
-    public function __construct() {
-    }
+	/**
+	 * Create a new event instance.
+	 *
+	 * @return void
+	 */
+	public function __construct() {
+	}
 
-    public function eloquentCreated(Model $model) {
-	    \Log::info("Created Eloquent Model!");
-	    \Log::info(print_r($model->toArray(),1));
-
-	    switch(true) {
-		    case is_subclass_of($model, "\App\Leads\Base"):
-				\Log::info("It's a lead! Checking to see if it's a dupe...");
+	public function eloquentCreated(Model $model) {
+		switch(true) {
+			case is_subclass_of($model, "\App\Leads\Base"):
 				if($dupe = $model->is_duplicate()) {
 					\Log::info("Found possible duplicate!");
 					\Log::info(print_r($dupe->toArray(),1));
 					$model->duplicate_of = $dupe->id;
 					$model->save();
-				} else {
-					\Log::info("No dupe detected...");
 				}
-		    	break;
+				break;
+		}
+	}
 
-	    }
-
-    }
-
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return Channel|array
-     */
-    public function broadcastOn()
-    {
-        return new PrivateChannel('channel-name');
-    }
+	/**
+	 * Get the channels the event should broadcast on.
+	 *
+	 * @return Channel|array
+	 */
+	public function broadcastOn()
+	{
+		return new PrivateChannel('channel-name');
+	}
 }

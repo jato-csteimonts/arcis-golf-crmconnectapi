@@ -32,11 +32,6 @@ class Base {
 			throw new \Exception(json_encode($messageClass));
 		}
 
-		if($Lead->email == "Wetz82@aol.com") {
-			\Log::info("STEIN TEST...");
-			exit;
-		}
-
 		$mergeData = [
 			"lead_type"   => preg_match("/member/i", $Lead->sub_type) ? "member" : "event",
 			"lead_name"   => ucwords(strtolower("{$Lead->first_name} {$Lead->last_name}")),
