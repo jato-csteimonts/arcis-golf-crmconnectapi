@@ -35,6 +35,10 @@ class Facebook extends Base {
 		$out['phone']                = preg_replace("/([^0-9]+)/", "", $data['phone_number'] ?? "");
 		$out['last_name']            = $name_info[1] ?? "No Last Name Provided";
 		$out['company_title']        = isset($data['company_name']) ? $data['company_name'] : "";
+		$out['utm_source']           = $data['utm_source'] ?? "";
+		$out['utm_medium']           = $data['utm_medium'] ?? "";
+		$out['utm_campaign']         = $data['utm_campaign'] ?? "";
+		$out['utm_term']             = $data['utm_term'] ?? "";
 
 		switch(true) {
 			case !$out['email']:

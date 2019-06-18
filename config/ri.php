@@ -272,29 +272,40 @@ return [
 				],
 				"clubLead.contact.mailingAddress.city"     => [
 					"verbose"  => "Primary Contact Mailing Address City",
-					"possible" => [],
+					"possible" => [
+						"address_city"
+					],
 				],
 				"clubLead.contact.mailingAddress.country"  => [
 					"verbose"  => "Primary Contact Mailing Address Country",
-					"possible" => [],
+					"possible" => [
+						"address_country"
+					],
 				],
 				"clubLead.contact.mailingAddress.address1" => [
 					"verbose"  => "Primary Contact Mailing Address Line 1",
-					"possible" => [],
+					"possible" => [
+						"address_1"
+					],
 				],
 				"clubLead.contact.mailingAddress.address2" => [
 					"verbose"  => "Primary Contact Mailing Address Line 2",
-					"possible" => [],
+					"possible" => [
+						"address_2"
+					],
 				],
 				"clubLead.contact.mailingAddress.state"    => [
 					"verbose"  => "Primary Contact Mailing Address State",
-					"possible" => [],
+					"possible" => [
+						"address_state"
+					],
 				],
 				"clubLead.contact.mailingAddress.zipCode"  => [
 					"verbose"  => "Primary Contact Mailing Address Zip Code",
 					"possible" => [
 						"zip",
 						"Zip",
+						"address_zip"
 					],
 				],
 				"clubLead.contact.mobilePhone"             => [
@@ -575,29 +586,40 @@ return [
 				],
 				"lead.contact.mailingAddress.city"     => [
 					"verbose"  => "Primary Contact Mailing Address City",
-					"possible" => [],
+					"possible" => [
+						"address_city"
+					],
 				],
 				"lead.contact.mailingAddress.country"  => [
 					"verbose"  => "Primary Contact Mailing Address Country",
-					"possible" => [],
+					"possible" => [
+						"address_country"
+					],
 				],
 				"lead.contact.mailingAddress.address1" => [
 					"verbose"  => "Primary Contact Mailing Address Line 1",
-					"possible" => [],
+					"possible" => [
+						"address_1"
+					],
 				],
 				"lead.contact.mailingAddress.address2" => [
 					"verbose"  => "Primary Contact Mailing Address Line 2",
-					"possible" => [],
+					"possible" => [
+						"address_2"
+					],
 				],
 				"lead.contact.mailingAddress.state"    => [
 					"verbose"  => "Primary Contact Mailing Address State",
-					"possible" => [],
+					"possible" => [
+						"address_state"
+					],
 				],
 				"lead.contact.mailingAddress.zipCode"  => [
 					"verbose"  => "Primary Contact Mailing Address Zip Code",
 					"possible" => [
 						"zip",
 						"Zip",
+						"address_zip"
 					],
 				],
 				"lead.contact.mobilePhone"             => [

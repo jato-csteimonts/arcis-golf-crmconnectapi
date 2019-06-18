@@ -36,7 +36,6 @@ class Facebook extends Base {
 			$data = $Lead->normalize($request->toArray());
 
 			//\Log::info(print_r($data,1));
-			//exit;
 
 			$Lead->webhook_request_id = $WebhookRequest->id;
 			$Lead->sub_type           = $data['sub_type'] ?? "";
@@ -245,8 +244,11 @@ class Facebook extends Base {
 					break;
 				default:
 					// Get Club
-					$tmp_data = explode("_", $data['campaign_attribution'], 2);
-					$Club = \App\Club::where("site_code", $tmp_data[0])->firstOrFail();
+					\Log::info(print_r($data,1));
+					\Log::info(print_r($request->toArray(),1));
+
+					//$tmp_data = explode("_", $data['campaign_attribution'], 2);
+					$Club = \App\Club::where("site_code", substr($data['utm_term'], 0, 3))->firstOrFail();
 					$Lead->club_id = $Club->id;
 
 					// Get Sales Person
@@ -273,6 +275,12 @@ class Facebook extends Base {
 			if(is_null($Lead->club_id)) {
 				$Lead->division = $Club->division;
 			}
+
+			/**
+			if($WebhookRequest->ip == "73.157.175.161") {
+				exit;
+			}
+			**/
 
 			$this->pushToCRM($Lead);
 

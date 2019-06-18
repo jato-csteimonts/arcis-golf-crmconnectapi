@@ -16,7 +16,7 @@ class BeloAndCo extends Base {
 		$out['campaign_attribution'] = "Website Lead";
 		$out['sub_type'] = "member";
 
-		//\Log::info(print_r($data,1));
+		\Log::info(print_r($data,1));
 
 		foreach ($data as $incoming_field_key => $incoming_field_value) {
 			$field = preg_replace(["/^field_member_/", "/_$/"], "", $incoming_field_key);
@@ -59,13 +59,13 @@ class BeloAndCo extends Base {
 					$out["Zip"] = $incoming_field_value['und'][0]['postal_code'];
 					continue;
 					break;
-				case is_array($incoming_field_value['und']):
+				case is_array($incoming_field_value['und'] ?? ""):
 					$tmp_data  = $incoming_field_value['und'][0];
 					$keys = array_keys($tmp_data);
 					$value = $tmp_data[$keys[0]];
 					break;
 				default:
-					$value = $incoming_field_value['und'];
+					$value = $incoming_field_value['und'] ?? "";
 					break;
 			}
 
@@ -81,7 +81,7 @@ class BeloAndCo extends Base {
 			}
 		}
 
-		$out['source'] = preg_replace("/^www\./", "", strtolower(parse_url((preg_match("/^http/", $out['source']) ? "" : "http://") . $out['source'], PHP_URL_HOST)));
+		$out['source'] = preg_replace("/^www\./", "", strtolower(parse_url((preg_match("/^http/", $out['source'] ?? "") ? "" : "http://") . ($out['source'] ?? ""), PHP_URL_HOST)));
 
 		if(isset($out['event_type'])) {
 			switch(true) {
