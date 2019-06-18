@@ -41,7 +41,7 @@ class Base extends Model {
 			            ->where("email", $this->email)
 			            ->where("source", $this->source)
 			            ->whereNull("duplicate_of")
-						->whereRaw("TIMESTAMPDIFF(SECOND, `created_at`, '{$this->created_at}') <= 60")
+						->whereRaw("TIMESTAMPDIFF(SECOND, `created_at`, '{$this->created_at}') <= 90")
 			            ->orderBy("created_at", "DESC")
 			            ->firstOrFail();
 			return $dupe;

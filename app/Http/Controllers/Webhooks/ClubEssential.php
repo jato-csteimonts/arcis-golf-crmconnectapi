@@ -34,8 +34,6 @@ class ClubEssential extends Base {
 			$Lead->phone              = $data['phone'] ?? "";
 			$Lead->source             = $data['source'] ?? "";
 
-			//abort(412, "Thanks Club Essential! We got your data, setting up the rest on our end, thanks!");
-
 			// Get Club
 			$Domain        = \App\Domain::where("domain", $Lead->source)->firstOrFail();
 			$Club          = \App\Club::find($Domain->club_id);
