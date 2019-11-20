@@ -42,6 +42,13 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('/admin/fields', 'Admin\FieldController');
 	Route::resource('/admin/clubs', 'Admin\ClubController');
 	Route::get('/admin/ajax', 'Controller@ajax');
+	Route::resource('/admin/campaign-mediums', 'Admin\CampaignMediumController');
+	Route::resource('/admin/campaign-names', 'Admin\CampaignNameController');
+	Route::resource('/admin/campaign-terms', 'Admin\CampaignTermController');
+	Route::get('/admin/clear-cache', function() {
+		Artisan::call('cache:clear');
+		return "Cache is cleared";
+	});
 });
 
 Route::get('/webform-javascript', 'WebformController@serve_js');

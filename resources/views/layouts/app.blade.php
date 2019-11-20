@@ -68,6 +68,16 @@
                                 </a>
 
                                 <ul class="dropdown-menu" role="menu">
+
+                                    <li>
+                                        <a href="{{url("/admin/campaign-mediums")}}">Campaign Mediums</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{url("/admin/campaign-names")}}">Campaign Names</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{url("/admin/campaign-terms")}}">Campaign Terms</a>
+                                    </li>
                                     <li>
                                         <a href="{{url("/admin/clubs")}}">Clubs</a>
                                     </li>
