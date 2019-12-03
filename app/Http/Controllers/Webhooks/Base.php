@@ -14,7 +14,6 @@ class Base {
 
 		\Log::info(print_r($request->toArray(),1));
 
-
 		$WebhookRequest = new \App\WebhookRequest();
 		$WebhookRequest->ip = $request->ip();
 		$WebhookRequest->data = serialize($request->toArray());

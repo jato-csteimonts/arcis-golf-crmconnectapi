@@ -107,10 +107,12 @@ class UnBounce extends Base {
 				$messageClass->lead = $Lead->toArray();
 			}
 
-			//\Log::info($e->getMessage());
+			\Log::info($e->getMessage());
+			/*
 			$u = \App\User::find(1);
 			$u->notify(new \App\Notifications\ApiError($messageClass));
 			abort(500, $e->getMessage());
+			*/
 		}
 
 	}

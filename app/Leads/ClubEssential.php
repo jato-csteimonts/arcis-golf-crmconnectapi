@@ -47,8 +47,9 @@ class ClubEssential extends Base {
 
 		\Log::info(print_r($data[0],1));
 
-		$out['sub_type'] = strstr(strtolower($data[0]['FormTitle']), "member") ? "member" : "event";
-		$out['source']   = preg_replace("/^www\./", "", strtolower(parse_url((preg_match("/^http/", $data[0]['URL']) ? "" : "http://") . $data[0]['URL'], PHP_URL_HOST)));
+		$out['sub_type']   = strstr(strtolower($data[0]['FormTitle']), "member") ? "member" : "event";
+		$out['source']     = preg_replace("/^www\./", "", strtolower(parse_url((preg_match("/^http/", $data[0]['URL']) ? "" : "http://") . $data[0]['URL'], PHP_URL_HOST)));
+		$out['utm_source'] = "Website";
 
 		foreach($data[0] AS $k => $v) {
 
@@ -56,6 +57,7 @@ class ClubEssential extends Base {
 
 			switch(true) {
 
+				case strstr($k, "email_") && filter_var($v, FILTER_VALIDATE_EMAIL):
 				case strstr($k, "email_address"):
 					$out['email'] = $v;
 					break;
@@ -92,6 +94,14 @@ class ClubEssential extends Base {
 					$out['address_zip'] = $v;
 					break;
 
+				default:
+					//$field = ucwords(str_replace("_", " ", preg_replace("/^_\d{1,2}_(\d{1,2})_/", "", $k)));
+					$field = preg_replace("/^_\d{1,2}_\d{1,2}_/", "", $k);
+					$field = preg_replace("/x003f/", "", strtolower($field));
+					$field = preg_replace("/_+$/", "", $field);
+					$out[$field] = $v;
+					break;
+
 			}
 
 		}
@@ -108,7 +118,7 @@ class ClubEssential extends Base {
 				break;
 		}
 
-		\Log::info(print_r($out,1));
+		//\Log::info(print_r($out,1));
 
 		return $out;
 

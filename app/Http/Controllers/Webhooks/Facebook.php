@@ -35,17 +35,40 @@ class Facebook extends Base {
 			$Lead = new \App\Leads\Facebook();
 			$data = $Lead->normalize($request->toArray());
 
-			//\Log::info(print_r($data,1));
+			\Log::info(print_r($data,1));
 
-			$Lead->webhook_request_id = $WebhookRequest->id;
-			$Lead->sub_type           = $data['sub_type'] ?? "";
-			$Lead->first_name         = $data['first_name'] ?? "";
-			$Lead->last_name          = $data['last_name'] ?? "";
-			$Lead->email              = $data['email'] ?? "";
-			$Lead->phone              = $data['phone'] ?? "";
-			$Lead->source             = $data['source'] ?? "";
+			$Lead->webhook_request_id  = $WebhookRequest->id;
+			$Lead->sub_type            = $data['sub_type'] ?? "";
+			$Lead->first_name          = $data['first_name'] ?? "";
+			$Lead->last_name           = $data['last_name'] ?? "";
+			$Lead->email               = $data['email'] ?? "";
+			$Lead->phone               = $data['phone'] ?? "";
+			$Lead->source              = $data['source'] ?? "";
+			$Lead->campaign_medium_id  = $data['campaign_medium_id'] ?? "";
+			$Lead->campaign_term_id    = $data['campaign_term_id'] ?? "";
+			$Lead->revenue_category    = $data['revenue_category'] ?? "";
 
 			switch(true) {
+
+				case isset($data['utm_source']) && preg_match("/^([\d]{7})\-([\d]{4})$/", $data['utm_source']):
+
+					$Lead->club_id = $data['club_id'];
+					$Club = \App\Club::findOrFail($Lead->club_id);
+
+					// Get Sales Person
+					$SalespersonRole   = \App\UserRole::where("club_id", $Club->id)->where("role", "salesperson")->where("sub_role", $Lead->sub_type)->firstOrFail();
+					$Salesperson       = \App\User::findOrFail($SalespersonRole->user_id);
+					$Lead->salesperson = $Salesperson->id;
+
+					// Get Owner
+					$OwnerRole   = \App\UserRole::where("club_id", $Club->id)->where("role", "owner")->where("sub_role", $Lead->sub_type)->firstOrFail();
+					$Owner       = \App\User::findOrFail($OwnerRole->user_id);
+					$Lead->owner = $Owner->id;
+
+					$mail_to = array_unique(array_merge([$Owner->email], [$Salesperson->email]));
+
+					break;
+
 				case strstr($data['campaign_attribution'], "DFW"):
 
 					$Club           = new \App\Club();
@@ -270,17 +293,9 @@ class Facebook extends Base {
 			$Lead->save();
 			$Lead->refresh();
 
-			//\Log::info(print_r($Lead->toArray(),1));
-
 			if(is_null($Lead->club_id)) {
 				$Lead->division = $Club->division;
 			}
-
-			/**
-			if($WebhookRequest->ip == "73.157.175.161") {
-				exit;
-			}
-			**/
 
 			$this->pushToCRM($Lead);
 
@@ -310,9 +325,11 @@ class Facebook extends Base {
 			\Log::info($e->getMessage());
 			\Log::info($e->getFile());
 			\Log::info($e->getLine());
+			/**
 			$u = \App\User::find(1);
 			$u->notify(new \App\Notifications\ApiError($messageClass));
 			abort(412, $e->getMessage());
+			**/
 
 		}
 

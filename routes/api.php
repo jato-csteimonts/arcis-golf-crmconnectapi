@@ -18,6 +18,7 @@ $serviceProviders = [
 	"beloandco"     => "BeloAndCo",
 	"facebook"      => "Facebook",
 	"clubessential" => "ClubEssential",
+	"instagram"     => "Instagram",
 ];
 
 foreach($serviceProviders as $type => $controller) {

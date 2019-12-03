@@ -20,7 +20,7 @@ class BeloAndCo extends Base {
 			$Lead = new \App\Leads\BeloAndCo();
 			$data = $Lead->normalize($request->toArray());
 
-			//\Log::info(print_r($data,1));
+			\Log::info(print_r($data,1));
 
 			$Lead->webhook_request_id = $WebhookRequest->id;
 			$Lead->sub_type           = $data['sub_type'] ?? "";
@@ -80,10 +80,11 @@ class BeloAndCo extends Base {
 			}
 
 			\Log::info($e->getMessage());
+			/**
 			$u = \App\User::find(1);
 			$u->notify(new \App\Notifications\ApiError($messageClass));
 			abort(412, $e->getMessage());
-
+			**/
 		}
 
 	}

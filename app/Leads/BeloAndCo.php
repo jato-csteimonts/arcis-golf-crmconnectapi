@@ -16,7 +16,7 @@ class BeloAndCo extends Base {
 		$out['campaign_attribution'] = "Website Lead";
 		$out['sub_type'] = "member";
 
-		\Log::info(print_r($data,1));
+		//\Log::info(print_r($data,1));
 
 		foreach ($data as $incoming_field_key => $incoming_field_value) {
 			$field = preg_replace(["/^field_member_/", "/_$/"], "", $incoming_field_key);
@@ -133,7 +133,7 @@ class BeloAndCo extends Base {
 				break;
 		}
 
-		\Log::info(print_r($out,1));
+		//\Log::info(print_r($out,1));
 
 		return $out;
 

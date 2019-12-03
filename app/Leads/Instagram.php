@@ -2,10 +2,10 @@
 
 namespace App\Leads;
 
-class Facebook extends Base {
+class Instagram extends Base {
 
 	public function __construct() {
-		$this->setAttribute("type", self::$TYPE_FACEBOOK);
+		$this->setAttribute("type", self::$TYPE_INSTAGRAM);
 		parent::__construct();
 	}
 
@@ -29,7 +29,7 @@ class Facebook extends Base {
 		$out['campaign_term_id']     = \App\CampaignTerm::where("code", $campaign_term)->first()->id;
 		$out['revenue_category']     = $revenue_category;
 		$out['sub_type']             = $revenue_category == "01" ? "member" : "event";
-		$out['source']               = "Facebook Lead Ad: " . $out['campaign_attribution'];
+		$out['source']               = "Instagram Lead Ad: " . $out['campaign_attribution'];
 		$out['email']                = $data['email'] ?? "";
 		$out['first_name']           = $data['first_name'] ?? "";
 		$out['last_name']            = $data['last_name'] ?? "No Last Name Provided";

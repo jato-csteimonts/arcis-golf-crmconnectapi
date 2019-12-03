@@ -9,9 +9,11 @@ use App\Mail\Lead;
 
 use Illuminate\Http\Request;
 
-class ClubEssential extends Base {
+class Instagram extends Base {
 
 	public function process(Request $request) {
+
+		\Log::info(print_r($request->toArray(),1));
 
 		try {
 
@@ -23,23 +25,25 @@ class ClubEssential extends Base {
 
 			$WebhookRequest = parent::process($request);
 
-			$Lead = new \App\Leads\ClubEssential();
+			$Lead = new \App\Leads\Instagram();
 			$data = $Lead->normalize($request->toArray());
 
-			$Lead->webhook_request_id = $WebhookRequest->id;
-			$Lead->sub_type           = $data['sub_type'] ?? "";
-			$Lead->first_name         = $data['first_name'] ?? "";
-			$Lead->last_name          = $data['last_name'] ?? "";
-			$Lead->email              = $data['email'] ?? "";
-			$Lead->phone              = $data['phone'] ?? "";
-			$Lead->source             = $data['source'] ?? "";
+			\Log::info(print_r($data,1));
 
-			// Get Club
-			$Domain        = \App\Domain::where("domain", $Lead->source)->firstOrFail();
-			$Club          = \App\Club::find($Domain->club_id);
-			$Lead->club_id = $Club->id;
+			$Lead->webhook_request_id  = $WebhookRequest->id;
+			$Lead->sub_type            = $data['sub_type'] ?? "";
+			$Lead->first_name          = $data['first_name'] ?? "";
+			$Lead->last_name           = $data['last_name'] ?? "";
+			$Lead->email               = $data['email'] ?? "";
+			$Lead->phone               = $data['phone'] ?? "";
+			$Lead->source              = $data['source'] ?? "";
+			$Lead->club_id             = $data['club_id'] ?? "";
+			$Lead->campaign_medium_id  = $data['campaign_medium_id'] ?? "";
+			$Lead->campaign_term_id    = $data['campaign_term_id'] ?? "";
+			$Lead->revenue_category    = $data['revenue_category'] ?? "";
 
-			// Get Sales Person
+			$Club = \App\Club::findOrFail($Lead->club_id);
+
 			$SalespersonRole   = \App\UserRole::where("club_id", $Club->id)->where("role", "salesperson")->where("sub_role", $Lead->sub_type)->firstOrFail();
 			$Salesperson       = \App\User::findOrFail($SalespersonRole->user_id);
 			$Lead->salesperson = $Salesperson->id;
@@ -55,12 +59,9 @@ class ClubEssential extends Base {
 			$Lead->save();
 			$Lead->refresh();
 
-			/**
-			\Log::info(print_r($Lead->toArray(),1));
-			if($WebhookRequest->ip == "73.157.175.161") {
-				exit;
+			if(is_null($Lead->club_id)) {
+				$Lead->division = $Club->division;
 			}
-			**/
 
 			$this->pushToCRM($Lead);
 
@@ -88,10 +89,13 @@ class ClubEssential extends Base {
 			}
 
 			\Log::info($e->getMessage());
+			\Log::info($e->getFile());
+			\Log::info($e->getLine());
+
 			/**
-			$u = \App\User::find(1);
-			$u->notify(new \App\Notifications\ApiError($messageClass));
-			abort(412, $e->getMessage());
+				$u = \App\User::find(1);
+				$u->notify(new \App\Notifications\ApiError($messageClass));
+				abort(412, $e->getMessage());
 			**/
 		}
 
