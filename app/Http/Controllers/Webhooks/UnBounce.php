@@ -29,7 +29,10 @@ class UnBounce extends Base {
 			$Lead->email              = $data['email'];
 			$Lead->phone              = $data['phone'] ?? null;
 			$Lead->source             = $data['source'];
-			$Lead->data               = serialize($data);
+			$Lead->campaign_term_id   = $data['campaign_term_id'] ?? null;
+			$Lead->campaign_medium_id = $data['campaign_medium_id'] ?? null;
+			$Lead->campaign_name_id   = $data['campaign_name_id'] ?? null;
+			$Lead->revenue_category   = $data['revenue_category'] ?? null;
 
 			// Get Club
 			try {
@@ -40,6 +43,28 @@ class UnBounce extends Base {
 				$Club          = \App\Club::find($Domain->club_id);
 				$Lead->club_id = $Club->id;
 			}
+
+			$ClubCode = $Club->site_code;
+
+			try {
+				$CampaignMedium     = \App\CampaignMedium::where("code", $Lead->campaign_medium_id)->firstOrFail();
+				$CampaignMediumCode = $CampaignMedium->code;
+			} catch(\Exception $e) {
+				$CampaignMediumCode = "00";
+			}
+
+			$RevenueCategory = $Lead->revenue_category ? str_pad($Lead->revenue_category, 2, "0", STR_PAD_LEFT) : "00";
+
+			try {
+				$CampaignTerm     = \App\CampaignTerm::where("code", $Lead->campaign_term_id)->firstOrFail();
+				$CampaignTermCode = $CampaignTerm->code;
+			} catch(\Exception $e) {
+				$CampaignTermCode = "0000";
+			}
+
+			$data['campaign_attribution'] = "{$ClubCode}{$CampaignMediumCode}{$RevenueCategory}-{$CampaignTermCode}";
+
+			$Lead->data = serialize($data);
 
 			// Get Sales Person
 			try {

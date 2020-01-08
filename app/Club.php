@@ -3,10 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Club extends Model
 {
 	protected $guarded = [];
+	use SoftDeletes;
 
 	public function domains()
 	{

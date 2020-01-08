@@ -29,10 +29,42 @@ class BeloAndCo extends Base {
 			$Lead->email              = $data['email'] ?? "";
 			$Lead->phone              = $data['phone'] ?? "";
 			$Lead->source             = $data['source'] ?? "";
+			$Lead->campaign_term_id   = $data['campaign_term_id'] ?? null;
+			$Lead->campaign_medium_id = $data['campaign_medium_id'] ?? null;
+			$Lead->campaign_name_id   = $data['campaign_name_id'] ?? null;
+			$Lead->revenue_category   = $data['revenue_category'] ?? null;
 
 			// Get Club
 			$Domain        = \App\Domain::where("domain", $Lead->source)->firstOrFail();
 			$Lead->club_id = $Domain->club_id;
+			$Club          = \App\Club::findOrFail($Lead->club_id);
+
+			/**
+				BEGIN: Creating Attribution Code for Reserve Interactive
+			**/
+			$ClubCode = $Club->site_code;
+
+			try {
+				$CampaignMedium     = \App\CampaignMedium::where("code", $Lead->campaign_medium_id)->firstOrFail();
+				$CampaignMediumCode = $CampaignMedium->code;
+			} catch(\Exception $e) {
+				$CampaignMediumCode = "00";
+			}
+
+			$RevenueCategory = $Lead->revenue_category ? str_pad($Lead->revenue_category, 2, "0", STR_PAD_LEFT) : "00";
+
+			try {
+				$CampaignTerm     = \App\CampaignTerm::where("code", $Lead->campaign_term_id)->firstOrFail();
+				$CampaignTermCode = $CampaignTerm->code;
+			} catch(\Exception $e) {
+				$CampaignTermCode = "0000";
+			}
+
+			$data['campaign_attribution'] = "{$ClubCode}{$CampaignMediumCode}{$RevenueCategory}-{$CampaignTermCode}";
+
+			/**
+				END: Creating Attribution Code for Reserve Interactive
+			**/
 
 			// Get Sales Person
 			$SalespersonRole   = \App\UserRole::where("club_id",$Domain->club_id)->where("role", "salesperson")->where("sub_role", $Lead->sub_type)->firstOrFail();

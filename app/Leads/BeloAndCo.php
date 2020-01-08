@@ -15,6 +15,9 @@ class BeloAndCo extends Base {
 
 		$out['campaign_attribution'] = "Website Lead";
 		$out['sub_type'] = "member";
+		$out['campaign_medium_id'] = 2;
+		$out['utm_medium'] = \App\CampaignMedium::where("id", $out['campaign_medium_id'])->first()->code ?? "";
+		$out['utm_term'] = "0000";
 
 		//\Log::info(print_r($data,1));
 
@@ -117,6 +120,12 @@ class BeloAndCo extends Base {
 					$out['sub_type'] = "event";
 					break;
 			}
+		}
+
+		switch($out['sub_type']) {
+			case "private": $out['revenue_category'] = 3; break;
+			case "wedding": $out['revenue_category'] = 2; break;
+			case "member":  $out['revenue_category'] = 1; break;
 		}
 
 		$out['email'] = trim(str_replace(" ", "", $out['email'] ?? null));

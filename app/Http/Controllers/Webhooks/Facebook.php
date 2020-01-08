@@ -46,6 +46,7 @@ class Facebook extends Base {
 			$Lead->source              = $data['source'] ?? "";
 			$Lead->campaign_medium_id  = $data['campaign_medium_id'] ?? "";
 			$Lead->campaign_term_id    = $data['campaign_term_id'] ?? "";
+			$Lead->campaign_name_id    = $data['campaign_name_id'] ?? null;
 			$Lead->revenue_category    = $data['revenue_category'] ?? "";
 
 			switch(true) {
@@ -54,6 +55,33 @@ class Facebook extends Base {
 
 					$Lead->club_id = $data['club_id'];
 					$Club = \App\Club::findOrFail($Lead->club_id);
+
+					/**
+						BEGIN: Creating Attribution Code for Reserve Interactive
+					**/
+					$ClubCode = $Club->site_code;
+
+					try {
+						$CampaignMedium     = \App\CampaignMedium::where("code", $Lead->campaign_medium_id)->firstOrFail();
+						$CampaignMediumCode = $CampaignMedium->code;
+					} catch(\Exception $e) {
+						$CampaignMediumCode = "00";
+					}
+
+					$RevenueCategory = $Lead->revenue_category ? str_pad($Lead->revenue_category, 2, "0", STR_PAD_LEFT) : "00";
+
+					try {
+						$CampaignTerm     = \App\CampaignTerm::where("code", $Lead->campaign_term_id)->firstOrFail();
+						$CampaignTermCode = $CampaignTerm->code;
+					} catch(\Exception $e) {
+						$CampaignTermCode = "0000";
+					}
+
+					$data['campaign_attribution'] = "{$ClubCode}{$CampaignMediumCode}{$RevenueCategory}-{$CampaignTermCode}";
+
+					/**
+						END: Creating Attribution Code for Reserve Interactive
+					**/
 
 					// Get Sales Person
 					$SalespersonRole   = \App\UserRole::where("club_id", $Club->id)->where("role", "salesperson")->where("sub_role", $Lead->sub_type)->firstOrFail();
@@ -273,6 +301,33 @@ class Facebook extends Base {
 					//$tmp_data = explode("_", $data['campaign_attribution'], 2);
 					$Club = \App\Club::where("site_code", substr($data['utm_term'], 0, 3))->firstOrFail();
 					$Lead->club_id = $Club->id;
+
+					/**
+						BEGIN: Creating Attribution Code for Reserve Interactive
+					**/
+					$ClubCode = $Club->site_code;
+
+					try {
+						$CampaignMedium     = \App\CampaignMedium::where("code", $Lead->campaign_medium_id)->firstOrFail();
+						$CampaignMediumCode = $CampaignMedium->code;
+					} catch(\Exception $e) {
+						$CampaignMediumCode = "00";
+					}
+
+					$RevenueCategory = $Lead->revenue_category ? str_pad($Lead->revenue_category, 2, "0", STR_PAD_LEFT) : "00";
+
+					try {
+						$CampaignTerm     = \App\CampaignTerm::where("code", $Lead->campaign_term_id)->firstOrFail();
+						$CampaignTermCode = $CampaignTerm->code;
+					} catch(\Exception $e) {
+						$CampaignTermCode = "0000";
+					}
+
+					$data['campaign_attribution'] = "{$ClubCode}{$CampaignMediumCode}{$RevenueCategory}-{$CampaignTermCode}";
+
+					/**
+						END: Creating Attribution Code for Reserve Interactive
+					**/
 
 					// Get Sales Person
 					$SalespersonRole   = \App\UserRole::where("club_id", $Club->id)->where("role", "salesperson")->where("sub_role", $Lead->sub_type)->firstOrFail();

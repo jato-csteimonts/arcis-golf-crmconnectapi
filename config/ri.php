@@ -68,7 +68,7 @@ return [
 				"clubLead.customData(0).tx01"  => [
 					"verbose"  => "campaign attribution",
 					"possible" => [
-						//"campaign_attribution",
+						"campaign_attribution",
 						"campaign",
 						"utm_source",
 					],

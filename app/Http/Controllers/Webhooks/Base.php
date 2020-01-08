@@ -101,6 +101,9 @@ class Base {
 				throw new \Exception(json_encode($messageClass));
 			}
 
+			$Lead->ri_id = $response['Body']->results[0]->uniqueIds->uniqueId;
+			$Lead->save();
+
 		} catch (\GuzzleHttp\Exception\ServerException $e) {
 
 			$ReserveInteractive->lead_id = $Lead->id;

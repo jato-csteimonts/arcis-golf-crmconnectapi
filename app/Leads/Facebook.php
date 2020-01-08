@@ -35,9 +35,9 @@ class Facebook extends Base {
 		$out['last_name']            = $data['last_name'] ?? "No Last Name Provided";
 		$out['phone']                = preg_replace("/([^0-9]+)/", "", $data['phone_number'] ?? "");
 		$out['utm_source']           = $data['utm_source'] ?? "";
-		$out['utm_medium']           = $data['utm_medium'] ?? "";
+		$out['utm_medium']           = \App\CampaignMedium::where("id", $out['campaign_medium_id'])->first()->code ?? "";
 		$out['utm_campaign']         = $data['utm_campaign'] ?? "";
-		$out['utm_term']             = $data['utm_term'] ?? "";
+		$out['utm_term']             = \App\CampaignTerm::where("id", $out['campaign_term_id'])->first()->code;
 		$out['utm_content']          = $data['utm_content'] ?? "";
 
 		switch(true) {
@@ -50,6 +50,12 @@ class Facebook extends Base {
 			case !$out['last_name']:
 				throw new \Exception("Reserve Interactive requires a contact to have a last name. No last name provided, aborting...");
 				break;
+		}
+
+		if(isset($data['utm_campaign'])) {
+			try {
+				$out['campaign_name_id'] = \App\CampaignName::where("slug", $data['utm_campaign'])->firstOrFail()->id;
+			} catch (\Exception $e) {}
 		}
 
 		//\Log::info(print_r($out,1));
