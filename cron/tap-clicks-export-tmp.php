@@ -64,7 +64,7 @@ $data[] = [
 	"utm_source",
 ];
 
-foreach(["tap_clicks_member_leads", "tap_clicks_event_leads"] as $request) {
+foreach(["tap_clicks_member_leads"/**,"tap_clicks_event_leads"**/] as $request) {
 
 	$lead_type = preg_match("/_member_/", $request) ? "member" : "event";
 	$requests  = 0;
@@ -98,9 +98,6 @@ foreach(["tap_clicks_member_leads", "tap_clicks_event_leads"] as $request) {
 
 				print($offset+$index+1 . ": {$record[7]} {$record[8]} ({$record[9]}) - {$record[4]}\n");
 
-				print_r($record);
-				exit;
-
 				$lead      = new stdClass();
 				$lead_data = [];
 
@@ -108,10 +105,22 @@ foreach(["tap_clicks_member_leads", "tap_clicks_event_leads"] as $request) {
 					$ri        = \App\ReserveInteractive::where("response", "LIKE", "%\"{$record[0]}\"%")->firstOrFail();
 					$lead      = \App\Lead::find($ri->lead_id);
 					$lead_data = unserialize($lead->data);
-					print_r($lead->toArray());
-				} catch (Exception $e) {}
+					//print_r($lead->toArray());
+				} catch (Exception $e) {
 
-				print_r($lead_data);
+
+
+
+
+
+					print_r($record);
+					//exit;
+
+				}
+
+				continue;
+
+				//print_r($lead_data);
 
 				$attribution_code = $lead_data['utm_term'] ?? "";
 
@@ -176,9 +185,9 @@ foreach(["tap_clicks_member_leads", "tap_clicks_event_leads"] as $request) {
 
 					$attribution_code = "{$site_code}{$medium}{$revenue_category}";
 
-					print("Old: {$old_attribution_code}\n");
-					print("New: {$attribution_code}\n");
-					print("---------------------\n");
+					//print("Old: {$old_attribution_code}\n");
+					//print("New: {$attribution_code}\n");
+					//print("---------------------\n");
 
 				}
 

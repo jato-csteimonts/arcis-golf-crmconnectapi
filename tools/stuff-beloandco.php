@@ -12,7 +12,7 @@ $missing_terms = [];
 
 $sub_types = [];
 
-foreach(App\Leads\Base::whereNull("duplicate_of")->where("type", App\Leads\Base::$TYPE_BELOANDCO)->orderBy("created_at", "DESC")->get() as $Lead) {
+foreach(App\Leads\Base::whereNull("duplicate_of")->whereNull("revenue_category")->where("type", App\Leads\Base::$TYPE_BELOANDCO)->orderBy("created_at", "DESC")->get() as $Lead) {
 
 	$data = unserialize($Lead->data);
 
@@ -32,7 +32,12 @@ foreach(App\Leads\Base::whereNull("duplicate_of")->where("type", App\Leads\Base:
 
 	$revenue_category = null;
 	switch($data['sub_type']) {
-		case "private": $revenue_category = 3; break;
+		case "private":
+		case "corporate":
+		case "event":
+		case "tournament":
+			$revenue_category = 3;
+			break;
 		case "wedding": $revenue_category = 2; break;
 		case "member": $revenue_category = 1; break;
 	}

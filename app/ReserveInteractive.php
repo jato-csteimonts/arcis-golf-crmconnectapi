@@ -45,11 +45,13 @@ class ReserveInteractive extends Model {
 
 		$regex = '/(' .implode('|', $misc_ignore) .')/i';
 
-		/*
+		/**
 		\Log::info("***** STEIN *****");
 		\Log::info(print_r($form_data,1));
+		\Log::info(print_r($data,1));
 		\Log::info("***** STEIN *****");
-		*/
+		exit;
+		**/
 
 		foreach($form_data as $k => $v) {
 			if(!in_array($k, $used) && !preg_match($regex, $k)) {
@@ -70,7 +72,7 @@ class ReserveInteractive extends Model {
 		$json['header'] = $header;
 		$json['data'][] = $data;
 
-		//Log::info(print_r($this->json,1));
+		//\Log::info(print_r($json,1));
 
 		return $json;
 

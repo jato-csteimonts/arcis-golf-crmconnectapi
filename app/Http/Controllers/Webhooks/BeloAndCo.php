@@ -76,6 +76,10 @@ class BeloAndCo extends Base {
 			$Owner       = \App\User::findOrFail($OwnerRole->user_id);
 			$Lead->owner = $Owner->id;
 
+			\Log::info("*************************");
+			\Log::info(print_r($data,1));
+			\Log::info("*************************");
+
 			$Lead->data = serialize($data);
 
 			\Log::info(print_r($Lead->toArray(),1));

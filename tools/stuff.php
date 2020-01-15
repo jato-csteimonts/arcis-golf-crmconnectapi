@@ -10,7 +10,7 @@ $count = 0;
 
 $missing_terms = [];
 
-foreach(App\Leads\Base::whereNull("duplicate_of")->where("type", App\Leads\Base::$TYPE_UNBOUNCE)->orderBy("created_at", "DESC")->get() as $Lead) {
+foreach(App\Leads\Base::whereNull("duplicate_of")->whereNull("revenue_category")->where("type", App\Leads\Base::$TYPE_UNBOUNCE)->orderBy("created_at", "DESC")->get() as $Lead) {
 
 	$data = unserialize($Lead->data);
 
@@ -39,9 +39,22 @@ foreach(App\Leads\Base::whereNull("duplicate_of")->where("type", App\Leads\Base:
 			break;
 
 		default:
+
 			$campaign_term_code    = null;
 			$campaign_medium_code  = null;
 			$revenue_category_code = null;
+
+			switch($Lead->sub_type) {
+				case "private":
+				case "corporate":
+				case "event":
+				case "tournament":
+					$revenue_category_code = "03";
+					break;
+				case "wedding": $revenue_category_code = "02"; break;
+				case "member": $revenue_category_code = "01"; break;
+			}
+
 			break;
 
 	}

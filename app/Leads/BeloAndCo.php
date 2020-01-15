@@ -123,7 +123,12 @@ class BeloAndCo extends Base {
 		}
 
 		switch($out['sub_type']) {
-			case "private": $out['revenue_category'] = 3; break;
+			case "private":
+			case "corporate":
+			case "event":
+			case "tournament":
+				$out['revenue_category'] = 3;
+				break;
 			case "wedding": $out['revenue_category'] = 2; break;
 			case "member":  $out['revenue_category'] = 1; break;
 		}
