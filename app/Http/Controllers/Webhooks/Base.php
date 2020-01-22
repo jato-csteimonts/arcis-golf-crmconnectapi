@@ -80,6 +80,8 @@ class Base {
 
 		\Log::info(print_r($args,1));
 
+		exit;
+
 		$ReserveInteractive = new \App\ReserveInteractive();
 
 		try {

@@ -105,7 +105,7 @@ class UnBounce extends Base {
 			try {
 				$CampaignTerm = \App\CampaignTerm::where("code", $campaign_term_code)->firstOrFail();
 				$out['campaign_term_id'] = $CampaignTerm->id;
-				$out['utm_term']         = $CampaignTerm->code;
+				$out['utm_term']         = $CampaignTerm->slug;
 			} catch (\Exception $e) {}
 		}
 
@@ -113,7 +113,7 @@ class UnBounce extends Base {
 			try {
 				$CampaignMedium = \App\CampaignMedium::where("code", $campaign_medium_code)->firstOrFail();
 				$out['campaign_medium_id'] = $CampaignMedium->id;
-				$out['utm_medium']         = $CampaignMedium->code;
+				$out['utm_medium']         = $CampaignMedium->slug;
 			} catch (\Exception $e) {}
 		}
 

@@ -16,7 +16,7 @@ class BeloAndCo extends Base {
 		$out['campaign_attribution'] = "Website Lead";
 		$out['sub_type'] = "member";
 		$out['campaign_medium_id'] = 2;
-		$out['utm_medium'] = \App\CampaignMedium::where("id", $out['campaign_medium_id'])->first()->code ?? "";
+		$out['utm_medium'] = \App\CampaignMedium::where("id", $out['campaign_medium_id'])->first()->slug ?? "";
 		$out['utm_term'] = "0000";
 
 		//\Log::info(print_r($data,1));

@@ -62,7 +62,7 @@ class Facebook extends Base {
 					$ClubCode = $Club->site_code;
 
 					try {
-						$CampaignMedium     = \App\CampaignMedium::where("code", $Lead->campaign_medium_id)->firstOrFail();
+						$CampaignMedium     = \App\CampaignMedium::where("id", $Lead->campaign_medium_id)->firstOrFail();
 						$CampaignMediumCode = $CampaignMedium->code;
 					} catch(\Exception $e) {
 						$CampaignMediumCode = "00";
@@ -71,7 +71,7 @@ class Facebook extends Base {
 					$RevenueCategory = $Lead->revenue_category ? str_pad($Lead->revenue_category, 2, "0", STR_PAD_LEFT) : "00";
 
 					try {
-						$CampaignTerm     = \App\CampaignTerm::where("code", $Lead->campaign_term_id)->firstOrFail();
+						$CampaignTerm     = \App\CampaignTerm::where("id", $Lead->campaign_term_id)->firstOrFail();
 						$CampaignTermCode = $CampaignTerm->code;
 					} catch(\Exception $e) {
 						$CampaignTermCode = "0000";

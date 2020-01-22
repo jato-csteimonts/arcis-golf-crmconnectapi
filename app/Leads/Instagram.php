@@ -35,9 +35,9 @@ class Instagram extends Base {
 		$out['last_name']            = $data['last_name'] ?? "No Last Name Provided";
 		$out['phone']                = preg_replace("/([^0-9]+)/", "", $data['phone_number'] ?? "");
 		$out['utm_source']           = $data['utm_source'] ?? "";
-		$out['utm_medium']           = \App\CampaignMedium::where("id", $out['campaign_medium_id'])->first()->code ?? "";
+		$out['utm_medium']           = \App\CampaignMedium::where("id", $out['campaign_medium_id'])->first()->slug ?? "";
 		$out['utm_campaign']         = $data['utm_campaign'] ?? "";
-		$out['utm_term']             = \App\CampaignTerm::where("id", $out['campaign_term_id'])->first()->code;
+		$out['utm_term']             = \App\CampaignTerm::where("id", $out['campaign_term_id'])->first()->slug;
 		$out['utm_content']          = $data['utm_content'] ?? "";
 
 		switch(true) {
