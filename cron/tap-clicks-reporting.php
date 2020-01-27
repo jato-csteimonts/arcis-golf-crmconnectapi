@@ -20,6 +20,7 @@ $headers = [
 	"campaign_term",
 	"campaign_name",
 	"status",
+    "last_activity",
 	"next_action",
 	"converted",
 	"assigned_to_name",
@@ -30,17 +31,15 @@ $headers = [
 
 $Leads = [];
 
-foreach(App\Leads\Base::whereNull("duplicate_of")
-                      ->where("created_at", ">=", "2020-01-01T00:00:00")
-                      ->where("sub_type", "!=", "member")
-                      ->orderBy("created_at", "DESC")
-                      ->get() as $index => $Lead) {
+$AllLeads = App\Leads\Base::whereNull("duplicate_of")
+                          ->where("created_at", ">=", "2020-01-01T00:00:00")
+                          //->where("sub_type", "!=", "member")
+                          //->where("sub_type", "=", "member")
+                          ->orderBy("created_at", "DESC");
 
-	/**
-	if($index >= 2) {
-		break;
-	}
-	**/
+$AllCount = $AllLeads->count();
+
+foreach($AllLeads->get() as $index => $Lead) {
 
 	//print_r($Lead->toArray());
 
@@ -56,7 +55,7 @@ foreach(App\Leads\Base::whereNull("duplicate_of")
 	$CurrentLead['campaign_name'] = $Lead->campaign_name_id ? \App\CampaignName::find($Lead->campaign_name_id)->slug : "";
 	$CurrentLead['revenue_category'] = str_pad($Lead->revenue_category, 2, "0", STR_PAD_LEFT);
 
-    print(($index+1) . "...");
+    print(($index+1) . " of {$AllCount}...\n");
 
     $data = unserialize($Lead->data);
 
@@ -102,7 +101,8 @@ foreach(App\Leads\Base::whereNull("duplicate_of")
 
         if(count($response['Body']->results)) {
 	        $CurrentLead['status']        = $response['Body']->results[0][array_search("leadStatus", $response['Body']->header)];
-	        $CurrentLead['next_action']   = $response['Body']->results[0][array_search("lastActivityInfo", $response['Body']->header)];
+	        $CurrentLead['last_activity'] = $response['Body']->results[0][array_search("lastActivityInfo", $response['Body']->header)];
+            $CurrentLead['next_action']   = $response['Body']->results[0][array_search("nextActionInfo", $response['Body']->header)];
 	        $CurrentLead['converted']     = $response['Body']->results[0][array_search("converted", $response['Body']->header)];
 	        $CurrentLead['created_at']    = $response['Body']->results[0][array_search("creationDate", $response['Body']->header)];
         } else {
