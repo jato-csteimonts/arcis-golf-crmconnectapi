@@ -33,8 +33,12 @@ $Leads = [];
 
 $AllLeads = App\Leads\Base::whereNull("duplicate_of")
                           ->where("created_at", ">=", "2020-01-01T00:00:00")
+                          //->where("created_at", ">=", "2019-10-31T00:00:00")
+                          //->where("created_at",  "<", "2020-01-01T00:00:00")
                           //->where("sub_type", "!=", "member")
                           //->where("sub_type", "=", "member")
+                          //->where("club_id", 14)
+                          //->whereIn("campaign_term_id", [1,4])
                           ->orderBy("created_at", "DESC");
 
 $AllCount = $AllLeads->count();
@@ -43,6 +47,15 @@ foreach($AllLeads->get() as $index => $Lead) {
 
 	//print_r($Lead->toArray());
 
+	print(($index+1) . " of {$AllCount} (Lead ID: {$Lead->id})...\n");
+
+	try {
+		\App\Club::findOrFail($Lead->club_id);
+	} catch (\Exception $e) {
+		print(" - ERROR: Could not find Club ID '{$Lead->club_id}'...\n");
+		continue;
+	}
+
 	$CurrentLead = [];
 	$CurrentLead['lead_id'] = $Lead->id;
 	$CurrentLead['club_id'] = \App\Club::find($Lead->club_id)->site_code;
@@ -50,12 +63,18 @@ foreach($AllLeads->get() as $index => $Lead) {
 	$CurrentLead['lead_first_name'] = $Lead->first_name;
 	$CurrentLead['lead_last_name'] = $Lead->last_name;
 	$CurrentLead['lead_email'] = $Lead->email;
-	$CurrentLead['medium'] = $Lead->campaign_medium_id ? \App\CampaignMedium::find($Lead->campaign_medium_id)->code : "";
-	$CurrentLead['campaign_term'] = $Lead->campaign_term_id ? \App\CampaignTerm::find($Lead->campaign_term_id)->code : "";
+	$CurrentLead['medium'] = $Lead->campaign_medium_id ? \App\CampaignMedium::find($Lead->campaign_medium_id)->slug : "";
+	$CurrentLead['campaign_term'] = $Lead->campaign_term_id ? \App\CampaignTerm::find($Lead->campaign_term_id)->slug : "";
 	$CurrentLead['campaign_name'] = $Lead->campaign_name_id ? \App\CampaignName::find($Lead->campaign_name_id)->slug : "";
-	$CurrentLead['revenue_category'] = str_pad($Lead->revenue_category, 2, "0", STR_PAD_LEFT);
 
-    print(($index+1) . " of {$AllCount}...\n");
+	switch($Lead->revenue_category) {
+		case 1: $revenue_category = "membership"; break;
+		case 2: $revenue_category = "wedding"; break;
+		case 3: $revenue_category = "private"; break;
+	}
+	$CurrentLead['revenue_category'] = $revenue_category;
+
+
 
     $data = unserialize($Lead->data);
 
@@ -163,7 +182,7 @@ foreach ($Leads as $row) {
 fclose($fp);
 
 if(!isset($Options['s']) || !$Options['s']) {
-    Storage::disk('ftp')->put('tapclicks-reports.csv', fopen('./tapclicks-reports.csv', 'r+'));
+    Storage::disk('ftp')->put('tapclicks-reports/tapclicks-reports.csv', fopen('./tapclicks-reports.csv', 'r+'));
 }
 
 ?>

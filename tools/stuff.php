@@ -10,7 +10,14 @@ $count = 0;
 
 $missing_terms = [];
 
-foreach(App\Leads\Base::whereNull("duplicate_of")->whereNull("revenue_category")->where("type", App\Leads\Base::$TYPE_UNBOUNCE)->orderBy("created_at", "DESC")->get() as $Lead) {
+foreach(App\Leads\Base::whereNull("duplicate_of")
+                      //->where("id", 24918)
+                      //->whereNull("revenue_category")
+                      ->where("campaign_term_id", 0)
+                      ->where("revenue_category", ">=", 1)
+                      ->where("type", App\Leads\Base::$TYPE_UNBOUNCE)
+                      ->orderBy("created_at", "DESC")
+                      ->get() as $Lead) {
 
 	$data = unserialize($Lead->data);
 
