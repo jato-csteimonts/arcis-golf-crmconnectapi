@@ -70,6 +70,9 @@
                                 <ul class="dropdown-menu" role="menu">
 
                                     <li>
+                                        <a href="{{url("/admin/leads")}}">Leads</a>
+                                    </li>
+                                    <li>
                                         <a href="{{url("/admin/campaign-mediums")}}">Campaign Mediums</a>
                                     </li>
                                     <li>

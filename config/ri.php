@@ -137,7 +137,9 @@ return [
 				],
 				"clubLead.customData(0).o00"   => [
 					"verbose"  => "lead source",
-					"possible" => [],
+					"possible" => [
+						"lead_source"
+					],
 				],
 				"clubLead.customData(0).tx04"  => [
 					"verbose"  => "lead source details",
@@ -433,7 +435,8 @@ return [
 				"lead.leadType"            => [
 					"verbose"  => "Lead Type",
 					"possible" => [
-						//"sub_type"
+						"leadType",
+						"lead_type",
 					],
 				],
 				"lead.locations"           => [
@@ -486,9 +489,10 @@ return [
 					],
 				],
 				"lead.customData(1).tx00"  => [
-					"verbose"  => "Lead type",
+					"verbose"  => "Custom Lead type",
 					"possible" => [
 						"sub_type",
+						"custom_lead_type",
 					],
 				],
 				"lead.customData(0).tx07"  => [
