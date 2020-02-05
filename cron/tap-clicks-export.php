@@ -25,45 +25,6 @@ if ( isset($Options['d']) && $Options['d'] != "D" ) {
 
 $ServiceProvider = new \App\ServiceProviders\ReserveInteractive();
 
-$data = [];
-
-/**
-$data[] = [
-	"Unique ID",
-	"Site",
-	"Site Code",
-	"Attribution Code",
-	"Lead Status",
-	"Lead First Name",
-	"Lead Last Name",
-	"Lead Email",
-	"Created Date",
-	"Lead Type",
-	"utm_content",
-	"utm_medium",
-	"utm_name",
-	"utm_term",
-	"utm_source",
-];
- **/
-
-$data[] = [
-	"Site_Code",
-	"Ri_Lead_Id",
-	"created_date",
-	"attribution_code",
-	"site",
-	"lead_type",
-	"lead_sub_type",
-	"lead_source",
-	"lead_status",
-	"utm_content",
-	"utm_medium",
-	"utm_name",
-	"utm_term",
-	"utm_source",
-];
-
 foreach(["tap_clicks_event_leads", "tap_clicks_member_leads"] as $request) {
 
 	$lead_type = preg_match("/_member_/", $request) ? "member" : "event";
@@ -91,6 +52,9 @@ foreach(["tap_clicks_event_leads", "tap_clicks_member_leads"] as $request) {
 	try {
 
 		$response = $ServiceProvider->request("GET",NULL, $args );
+        $headers = $response['Body']->header;
+        print_r($headers);
+        continue;
 
 		do {
 
@@ -98,7 +62,11 @@ foreach(["tap_clicks_event_leads", "tap_clicks_member_leads"] as $request) {
 
 				print($offset+$index+1 . ": {$record[7]} {$record[8]} ({$record[9]}) - {$record[4]}\n");
 
+
 				print_r($record);
+
+				break;
+
 
 				$lead      = new stdClass();
 				$lead_data = [];

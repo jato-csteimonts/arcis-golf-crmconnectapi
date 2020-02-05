@@ -15,6 +15,7 @@ $headers = [
 	"lead_first_name",
 	"lead_last_name",
 	"lead_email",
+    "lead_source",
 	"medium",
 	"revenue_category",
 	"campaign_term",
@@ -39,6 +40,7 @@ $AllLeads = App\Leads\Base::whereNull("duplicate_of")
                           //->where("sub_type", "=", "member")
                           //->where("club_id", 14)
                           //->whereIn("campaign_term_id", [1,4])
+                          ->take(1)
                           ->orderBy("created_at", "DESC");
 
 $AllCount = $AllLeads->count();
@@ -60,6 +62,7 @@ foreach($AllLeads->get() as $index => $Lead) {
 	$CurrentLead['lead_id'] = $Lead->id;
 	$CurrentLead['club_id'] = \App\Club::find($Lead->club_id)->site_code;
 	$CurrentLead['club_name'] = \App\Club::find($Lead->club_id)->name;
+    $CurrentLead['lead_source'] = "Digital";
 	$CurrentLead['lead_first_name'] = $Lead->first_name;
 	$CurrentLead['lead_last_name'] = $Lead->last_name;
 	$CurrentLead['lead_email'] = $Lead->email;
@@ -169,6 +172,108 @@ foreach($AllLeads->get() as $index => $Lead) {
 	}
 	$Leads[] = $tmp;
 }
+
+
+
+
+
+
+
+
+
+$filters   = [];
+$filters[] = "'creationDate', 'GREATER_THAN_OR_EQUAL_TO', '" . strftime("%m/%d/%Y %I:%M %p", strtotime("2020-01-01T00:00:00")) . "'";
+
+$ServiceProvider = new \App\ServiceProviders\ReserveInteractive();
+
+foreach(["tap_clicks_event_leads", "tap_clicks_member_leads"] as $request) {
+
+    $lead_type = preg_match("/_member_/", $request) ? "member" : "event";
+    $requests  = 0;
+    $interval  = 100;
+    $count     = 0;
+    $offset    = $interval*$requests;
+
+    $args = [
+        'auth' => [
+            env('RESERVE_INTERACTIVE_USERNAME'),
+            env('RESERVE_INTERACTIVE_PASSWORD')
+        ],
+        'query' => [
+            'requestName'  => $request,
+            'requestGuid'  => md5(date('YmdHis')),
+            'maxResults'   => $interval,
+            'firstResult'  => $offset,
+            'orderByField' => "localCreationDate",
+            'asc'          => false,
+            'filters'      => count($filters) ? "[[" . implode("],[", $filters) . "]]" : "",
+        ],
+    ];
+
+    try {
+
+        $response = $ServiceProvider->request("GET", NULL, $args);
+        $headers  = $response['Body']->header;
+
+        print_r($headers);
+
+        do {
+
+            foreach($response['Body']->results as $index => $record) {
+
+                print($offset+$index+1 . ": {$record[7]} {$record[8]} ({$record[9]}) - {$record[4]}\n");
+
+                $ri_id = $response['Body']->results[0][array_search("uniqueId", $response['Body']->header)];
+
+                print_r($record);
+                print("RI Id: {$ri_id}\n");
+
+                try {
+                    $Lead = App\Leads\Base::whereNull("duplicate_of")
+                                           ->where("ri_id", $ri_id)
+                                           ->firstOrFail();
+
+                    //print_r($Lead->toArray());
+                    exit;
+                } catch (\Exception $e) {
+                    exit;
+                }
+
+
+            }
+
+            $requests++;
+            $offset = $interval*$requests;
+            $args['query']['firstResult'] = $offset;
+
+            $response = $ServiceProvider->request("GET",NULL, $args );
+
+        } while(count($response['Body']->results));
+
+
+
+
+
+
+    } catch (\Exception $e) {
+
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 $Leads = array_merge([$headers], $Leads);
 
