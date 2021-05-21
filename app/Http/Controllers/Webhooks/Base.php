@@ -39,6 +39,16 @@ class Base {
 			"salesperson" => \App\User::findOrFail($Lead->salesperson)->email,
 		];
 
+		if($mergeData['lead_type'] == "event") {
+			switch($Lead->type) {
+				case \App\Leads\Base::$TYPE_BELOANDCO:
+					$mergeData['event_lead_type'] = "Arcis Website";
+					break;
+				default:
+					break;
+			}
+		}
+
 		if(!is_null($Lead->club_id)) {
 			$Club      = \App\Club::findOrFail($Lead->club_id);
 			$mergeData = array_merge($mergeData, [
@@ -80,7 +90,7 @@ class Base {
 
 		\Log::info(print_r($args,1));
 
-		exit;
+		//return true;
 
 		$ReserveInteractive = new \App\ReserveInteractive();
 

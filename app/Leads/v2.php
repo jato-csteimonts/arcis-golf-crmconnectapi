@@ -2,16 +2,22 @@
 
 namespace App\Leads;
 
-class BeloAndCo extends Base {
+class v2 extends Base {
 
 	public function __construct() {
-		$this->setAttribute("type", self::$TYPE_BELOANDCO);
+		$this->setAttribute("type", self::$TYPE_V2);
 		parent::__construct();
 	}
 
 	public function normalize($data = []) {
 
 		$out = [];
+
+		foreach ($data as $key => $value) {
+			$out[strtolower($key)] = $value;
+		}
+
+		//return $out;
 
 		$out['campaign_attribution'] = "Website Lead";
 		$out['sub_type'] = "member";
@@ -73,7 +79,7 @@ class BeloAndCo extends Base {
 					$out["City"] = $incoming_field_value['und'][0]['city'];
 					$out["State"] = $incoming_field_value['und'][0]['province'];
 					$out["Zip"] = $incoming_field_value['und'][0]['postal_code'];
-					continue;
+					//continue;
 					break;
 				case is_array($incoming_field_value['und'] ?? ""):
 					$tmp_data  = $incoming_field_value['und'][0];
@@ -105,7 +111,7 @@ class BeloAndCo extends Base {
 		\Log::info("*************");
 		\Log::info(print_r($out,1));
 		\Log::info("*************");
-		**/
+		 **/
 
 		if(isset($out['event_type'])) {
 			switch(true) {
@@ -114,7 +120,6 @@ class BeloAndCo extends Base {
 					break;
 				case preg_match("/private/i", $out['event_type']):
 					$out['sub_type'] = "private";
-					//$out['sub_type'] = "Arcis Website";
 					break;
 				case preg_match("/outing/i", $out['event_type']):
 				case preg_match("/tournament/i", $out['event_type']):

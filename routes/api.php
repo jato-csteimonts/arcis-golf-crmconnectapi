@@ -13,14 +13,28 @@ use Illuminate\Http\Request;
 |
 */
 $serviceProviders = [
+	"v2"            => "v2",
 	"unbounce"      => "UnBounce",
 	"distribion"    => "Distribion",
 	"beloandco"     => "BeloAndCo",
 	"facebook"      => "Facebook",
 	"clubessential" => "ClubEssential",
 	"instagram"     => "Instagram",
+	"tableau"       => "Tableau",
+	"iauditor"      => [
+		"controller" => "iAuditor",
+		"actions" => [
+			"get",
+		]
+	],
 ];
 
 foreach($serviceProviders as $type => $controller) {
-	Route::any($type, "Webhooks\\{$controller}@process");
+	if(is_array($controller)) {
+		foreach($controller['actions'] as $action) {
+			Route::any("{$type}/{$action}", "Webhooks\\{$controller['controller']}@{$action}");
+		}
+	} else {
+		Route::any($type, "Webhooks\\{$controller}@process");
+	}
 }

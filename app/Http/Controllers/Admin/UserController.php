@@ -81,6 +81,12 @@ class UserController extends Controller
     {
 	    try {
 		    $user = \App\User::findOrFail($id);
+		    if($user->phone) {
+		    	preg_match("/([\d]{3})([\d]{3})([\d]{4})/", $user->phone, $matches);
+		    	if(count($matches) == 4) {
+				    $user->phone = "({$matches[1]}) {$matches[2]}-{$matches[3]}";
+			    }
+		    }
 	    } catch (\Exception $e) {
 		    return redirect("/admin/users");
 	    }
@@ -106,6 +112,7 @@ class UserController extends Controller
 			    "name" => $request->name,
 			    "email" => $request->email,
 			    "is_admin" => $request->is_admin ?? 0,
+			    "phone" => preg_replace("/([^0-9]+)/", "", $request->phone)
 		    ];
 
 		    if($request->password) {

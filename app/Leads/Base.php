@@ -13,6 +13,7 @@ class Base extends Model {
 	public static $TYPE_FACEBOOK      = "facebook";
 	public static $TYPE_INSTAGRAM     = "instagram";
 	public static $TYPE_CLUBESSENTIAL = "clubessential";
+	public static $TYPE_V2            = "v2";
 
 	protected $table = 'leads';
 

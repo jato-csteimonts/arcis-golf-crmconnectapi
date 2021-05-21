@@ -8,6 +8,7 @@ use App\Webforms;
 use App\Mail\Lead;
 
 use Illuminate\Http\Request;
+use Twilio\Rest\Client;
 
 class Facebook extends Base {
 
@@ -361,6 +362,22 @@ class Facebook extends Base {
 
 			\Mail::to($mail_to)->bcc($mail_bcc)->send(new Lead($Owner, $Club, $Lead));
 			//\Mail::to(["chris.steimonts@gmail.com"])->send(new Lead($Owner, $Club, $Lead));
+
+			if($Owner->phone) {
+				$sid    = 'AC08c40b1284fd703d811fcd01c0eddf9b';
+				$token  = 'd3f1333fcce590636420451bd4bcdc63';
+				$client = new Client($sid, $token);
+
+				$body = view('sms.lead', ['club' => $Club, 'user' => $Owner, 'lead' => $Lead])->render();
+
+				$client->messages->create(
+					"+1{$Owner->phone}", [
+						'messagingServiceSid' => 'MG86b058c4cc5cf6a8b2e2247c946696e1',
+						'body' => $body
+					]
+				);
+				Log::info("Sent Text!!!");
+			}
 
 		} catch (\Exception $e) {
 

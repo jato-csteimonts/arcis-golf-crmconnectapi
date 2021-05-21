@@ -6,6 +6,33 @@ $app = require_once __DIR__ . '/../bootstrap/app.php';
 use Illuminate\Contracts\Console\Kernel;
 $app->make(Kernel::class)->bootstrap();
 
+use Twilio\Rest\Client;
+
+$sid    = 'AC08c40b1284fd703d811fcd01c0eddf9b';
+$token  = 'd3f1333fcce590636420451bd4bcdc63';
+$client = new Client($sid, $token);
+
+// +17403325490
+
+// Use the client to do fun stuff like send text messages!
+$client->messages->create(
+// the number you'd like to send the message to
+	'+15038812297',
+	[
+		// A Twilio phone number you purchased at twilio.com/console
+		//'from' => '+17403325490',
+		'messagingServiceSid' => 'MG86b058c4cc5cf6a8b2e2247c946696e1',
+		// +12487902802
+		// the body of the text message you'd like to send
+		'body' => 'Arcis Golf test!'
+	]
+);
+
+
+exit;
+
+
+
 $count = 0;
 
 $missing_terms = [];

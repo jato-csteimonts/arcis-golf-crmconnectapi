@@ -6,11 +6,12 @@ use App\Domain;
 use App\Field;
 use App\Webforms;
 use App\Mail\Lead;
+use Twilio\Rest\Client;
+use \Log;
 
 use Illuminate\Http\Request;
-use Twilio\Rest\Client;
 
-class ClubEssential extends Base {
+class v2 extends Base {
 
 	public function process(Request $request) {
 
@@ -23,9 +24,12 @@ class ClubEssential extends Base {
 			];
 
 			$WebhookRequest = parent::process($request);
-
-			$Lead = new \App\Leads\ClubEssential();
+			//$Lead = new \App\Leads\Pradera();
+			$Lead = new \App\Leads\v2();
 			$data = $Lead->normalize($request->toArray());
+
+			//Log::info(print_r($data,1));
+			//Log::info(print_r($Lead,1));
 
 			$Lead->webhook_request_id = $WebhookRequest->id;
 			$Lead->sub_type           = $data['sub_type'] ?? "";
@@ -36,8 +40,7 @@ class ClubEssential extends Base {
 			$Lead->source             = $data['source'] ?? "";
 
 			// Get Club
-			$Domain        = \App\Domain::where("domain", $Lead->source)->firstOrFail();
-			$Club          = \App\Club::find($Domain->club_id);
+			$Club          = \App\Club::where("name", $data['club_name'])->firstOrFail();
 			$Lead->club_id = $Club->id;
 
 			// Get Sales Person
@@ -59,9 +62,11 @@ class ClubEssential extends Base {
 			/**
 			\Log::info(print_r($Lead->toArray(),1));
 			if($WebhookRequest->ip == "73.157.175.161") {
-				exit;
+			exit;
 			}
-			**/
+			 **/
+
+			\Log::info("Sending to CRM.....");
 
 			$this->pushToCRM($Lead);
 
@@ -72,6 +77,8 @@ class ClubEssential extends Base {
 
 			\Mail::to($mail_to)->bcc($mail_bcc)->send(new Lead($Owner, $Club, $Lead));
 			//\Mail::to(["chris.steimonts@gmail.com"])->send(new Lead($Owner, $Club, $Lead));
+
+			//$Owner->phone = "5038812297";
 
 			if($Owner->phone) {
 				$sid    = 'AC08c40b1284fd703d811fcd01c0eddf9b';
@@ -105,11 +112,12 @@ class ClubEssential extends Base {
 			}
 
 			\Log::info($e->getMessage());
+			\Log::info(print_r($messageClass,1));
 			/**
 			$u = \App\User::find(1);
 			$u->notify(new \App\Notifications\ApiError($messageClass));
 			abort(412, $e->getMessage());
-			**/
+			 **/
 		}
 
 	}

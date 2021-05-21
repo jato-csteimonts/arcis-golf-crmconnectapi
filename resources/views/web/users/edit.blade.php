@@ -50,6 +50,14 @@
                             </div>
                             <div class="form-group">
                                 <div class="col-sm-2">&nbsp;</div>
+                                <label for="phone" class="col-sm-2 control-label">Phone</label>
+                                <div class="col-sm-6">
+                                    <input placeholder="(555) 555-5555" type="phone" class="form-control" name="phone" id="phone" value="{{ $user->phone }}" />
+                                </div>
+                                <div class="col-sm-2">&nbsp;</div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-2">&nbsp;</div>
                                 <label for="is_admin" class="col-sm-2 control-label">Is Admin</label>
                                 <div class="col-sm-6">
                                     <input type="radio" name="is_admin" value="1" id="is_admin-yes"{{$user->is_admin ? " checked='checked'" : ""}} />

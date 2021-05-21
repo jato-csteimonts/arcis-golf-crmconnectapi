@@ -429,12 +429,13 @@ return [
 					"verbose"  => "Lead Status",
 					"possible" => [],
 					"values"   => [
-						"new" => "New",
+						"new" => "1 New",
 					],
 				],
 				"lead.leadType"            => [
 					"verbose"  => "Lead Type",
 					"possible" => [
+						"event_lead_type",
 						"leadType",
 						"lead_type",
 					],
