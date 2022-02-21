@@ -27,9 +27,9 @@ class ReserveInteractive extends Base {
 
 	public function request($Method = null, $Route = null, array $Options = []) {
 
-		//\Log::info("METHOD: {$Method}");
-		//\Log::info("ROUTE: {$Route}");
-		//\Log::info(print_r($Options,1));
+		\Log::info("METHOD: {$Method}");
+		\Log::info("ROUTE: {$Route}");
+		\Log::info(print_r($Options,1));
 
 		return parent::request($Method, $Route, $Options);
 

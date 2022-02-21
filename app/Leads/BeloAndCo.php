@@ -19,7 +19,7 @@ class BeloAndCo extends Base {
 		$out['utm_medium'] = \App\CampaignMedium::where("id", $out['campaign_medium_id'])->first()->slug ?? "";
 		$out['utm_term'] = "0000";
 
-		//\Log::info(print_r($data,1));
+		\Log::info(print_r($data,1));
 
 		foreach ($data as $incoming_field_key => $incoming_field_value) {
 			$field = preg_replace(["/^field_member_/", "/_$/"], "", $incoming_field_key);
@@ -37,10 +37,13 @@ class BeloAndCo extends Base {
 						$out['sub_type'] = "event";
 					}
 					break;
+				case $field == "preferred_event_date":
+				case $field == "preferred_date":
 				case $field == "proposed_dates_of_event":
+
 					if(is_array($incoming_field_value)) {
 						$times = [];
-						if($incoming_field_value['und'][0]['value']) {
+						if(isset($incoming_field_value['und'][0]['value'])) {
 							$datetime = [];
 							if(isset($incoming_field_value['und'][0]['value']['date'])) {
 								$datetime[] = $incoming_field_value['und'][0]['value']['date'];
@@ -50,7 +53,7 @@ class BeloAndCo extends Base {
 							}
 							$times[] = implode(" at ", $datetime);
 						}
-						if($incoming_field_value['und'][0]['value2']) {
+						if(isset($incoming_field_value['und'][0]['value2'])) {
 							$datetime = [];
 							if(isset($incoming_field_value['und'][0]['value2']['date'])) {
 								$datetime[] = $incoming_field_value['und'][0]['value2']['date'];
@@ -73,12 +76,16 @@ class BeloAndCo extends Base {
 					$out["City"] = $incoming_field_value['und'][0]['city'];
 					$out["State"] = $incoming_field_value['und'][0]['province'];
 					$out["Zip"] = $incoming_field_value['und'][0]['postal_code'];
-					continue;
 					break;
-				case is_array($incoming_field_value['und'] ?? ""):
-					$tmp_data  = $incoming_field_value['und'][0];
-					$keys = array_keys($tmp_data);
-					$value = $tmp_data[$keys[0]];
+				case isset($incoming_field_value['und']) && is_array($incoming_field_value['und']) && count($incoming_field_value['und']):
+					//\Log::info(print_r($incoming_field_value,1));
+					if(isset($incoming_field_value['und'][0]) && count($incoming_field_value['und'][0])) {
+						$tmp_data  = $incoming_field_value['und'][0];
+						$keys = array_keys($tmp_data);
+						$value = $tmp_data[$keys[0]];
+					} else {
+						$value = implode(", ", $incoming_field_value['und']);
+					}
 					break;
 				default:
 					$value = $incoming_field_value['und'] ?? "";
@@ -99,13 +106,11 @@ class BeloAndCo extends Base {
 
 		$out['source'] = preg_replace("/^www\./", "", strtolower(parse_url((preg_match("/^http/", $out['source'] ?? "") ? "" : "http://") . ($out['source'] ?? ""), PHP_URL_HOST)));
 
-		/**
 		\Log::info("*************");
 		\Log::info("*** STEIN ***");
 		\Log::info("*************");
 		\Log::info(print_r($out,1));
 		\Log::info("*************");
-		**/
 
 		if(isset($out['event_type'])) {
 			switch(true) {

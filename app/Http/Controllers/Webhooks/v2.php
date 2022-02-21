@@ -28,8 +28,8 @@ class v2 extends Base {
 			$Lead = new \App\Leads\v2();
 			$data = $Lead->normalize($request->toArray());
 
-			//Log::info(print_r($data,1));
-			//Log::info(print_r($Lead,1));
+			Log::info(print_r($data,1));
+			Log::info(print_r($Lead,1));
 
 			$Lead->webhook_request_id = $WebhookRequest->id;
 			$Lead->sub_type           = $data['sub_type'] ?? "";
@@ -40,7 +40,15 @@ class v2 extends Base {
 			$Lead->source             = $data['source'] ?? "";
 
 			// Get Club
-			$Club          = \App\Club::where("name", $data['club_name'])->firstOrFail();
+			switch(true) {
+				case isset($data['club_name']):
+					$Club = \App\Club::where("name", $data['club_name'])->firstOrFail();
+					break;
+				case isset($data['site_code']):
+					$Club = \App\Club::where("site_code", $data['site_code'])->firstOrFail();
+					break;
+			}
+
 			$Lead->club_id = $Club->id;
 
 			// Get Sales Person

@@ -41,7 +41,9 @@ class Base {
 
 		if($mergeData['lead_type'] == "event") {
 			switch($Lead->type) {
+				case \App\Leads\Base::$TYPE_UNBOUNCE:
 				case \App\Leads\Base::$TYPE_BELOANDCO:
+				case \App\Leads\Base::$TYPE_V2:
 					$mergeData['event_lead_type'] = "Arcis Website";
 					break;
 				default:

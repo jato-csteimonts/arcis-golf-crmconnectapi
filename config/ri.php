@@ -108,6 +108,7 @@ return [
 					"verbose"  => "Preferred Visit Date",
 					"possible" => [
 						"preferred_date",
+						"preferred_event_date"
 					],
 				],
 				"clubLead.customData(0).tx02"  => [
@@ -486,7 +487,8 @@ return [
 				"lead.customData(0).tx06"  => [
 					"verbose"  => "Preferred Event Date",
 					"possible" => [
-						"preferred_event_date"
+						"preferred_event_date",
+						"preferred_date"
 					],
 				],
 				"lead.customData(1).tx00"  => [
@@ -532,7 +534,20 @@ return [
 					"verbose"  => "Expected Number of Guests",
 					"possible" => [
 						"expected_number_of_guests",
+						"estimated_number_of_guests",
 						"number",
+					],
+				],
+				"lead.estimatedAttendance"   => [
+					"verbose"  => "Estimated Attendance",
+					"possible" => [
+						"estimated_attendance",
+					],
+				],
+				"lead.customData(0).tx00"   => [
+					"verbose"  => "Event Information",
+					"possible" => [
+						"additional_comments",
 					],
 				],
 			],

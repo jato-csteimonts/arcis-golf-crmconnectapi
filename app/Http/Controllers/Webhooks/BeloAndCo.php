@@ -87,6 +87,8 @@ class BeloAndCo extends Base {
 			$Lead->save();
 			$Lead->refresh();
 
+			//exit;
+
 			$this->pushToCRM($Lead);
 
 			$Club = \App\Club::find($Lead->club_id);
@@ -112,10 +114,13 @@ class BeloAndCo extends Base {
 				$messageClass->fileName = $e->getFile();
 				$messageClass->lineNumber = $e->getLine();
 				$messageClass->request = $request->toArray();
-				$messageClass->lead = $Lead->toArray();
+				//$messageClass->lead = $Lead->toArray();
 			}
 
-			\Log::info($e->getMessage());
+			//\Log::info($e->getMessage());
+			//\Log::info($messageClass->message);
+			//\Log::info($messageClass->fileName);
+			//\Log::info($messageClass->lineNumber);
 			/**
 			$u = \App\User::find(1);
 			$u->notify(new \App\Notifications\ApiError($messageClass));

@@ -53,8 +53,17 @@ class ReserveInteractive extends Model {
 		exit;
 		**/
 
+		$skip = [
+			'event_type',
+			'site_code',
+			'public',
+			'campaign_medium_id',
+			'revenue_category',
+			'lead_type',
+		];
+
 		foreach($form_data as $k => $v) {
-			if(!in_array($k, $used) && !preg_match($regex, $k)) {
+			if(!in_array($k, $used) && !preg_match($regex, $k) && !in_array($k, $skip) && $v) {
 				$misc[] = ucwords(str_replace("_", " ", $k)) . " : {$v}";
 			}
 		}

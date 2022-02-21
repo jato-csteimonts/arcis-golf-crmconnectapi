@@ -39,24 +39,36 @@ class Base extends Client {
 
 	public function request($Method = null, $Route = null, array $Options = []) {
 
-		//\Log::info("METHOD: {$Method}");
-		//\Log::info("ROUTE: {$Route}");
-		//\Log::info(print_r($Options,1));
+		\Log::info("METHOD: {$Method}");
+		\Log::info("ROUTE: {$Route}");
+		\Log::info(print_r($Options,1));
 
-		$Response = parent::request($Method, "{$Route}", $Options);
+		try {
+			\Log::info("STEIN SENDING!!!!!!!!!!!!!!!!");
+			$Response = parent::request($Method, "{$Route}", $Options);
+		} catch (\Exception $e) {
+			\Log::info($e->getMessage());
+			\Log::info($e->getFile());
+			\Log::info($e->getLine());
+		}
 
-		//\Log::info(print_r($Response,1));
+		\Log::info(print_r($Response,1));
 
 		return $this->returnResponse($Response);
 
 	}
 
 	protected function returnResponse($Response) {
-		return [
+
+		$response = [
 			"StatusCode"    => $Response->getStatusCode(),
 			"ReasonPhrase"  => $Response->getReasonPhrase(),
 			"Body"          => json_decode($Response->getBody()->getContents()),
 		];
+
+		\Log::info(print_r($response,1));
+
+		return $response;
 	}
 
 }
